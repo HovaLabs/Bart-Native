@@ -4,6 +4,8 @@ import { View, Text } from 'react-native';
 
 import { stationInfoUpdated } from '../actions';
 
+import Destinations from './Destinations';
+
 class Station extends Component {
   componentDidMount() {
     // ping for train info
@@ -25,7 +27,7 @@ class Station extends Component {
     try {
       const reply = await fetch(stationUrl);
       const json = await reply.json();
-      this.props.stationInfoUpdated(reply);
+      this.props.stationInfoUpdated(json);
     } catch (ex) {
       console.error(ex);
     }
@@ -36,7 +38,7 @@ class Station extends Component {
       return null;
     }
 
-    return <Text>SOOOO MUCH INFO!!!!</Text>;
+    return <Destinations destinations={this.props.stationInfo.root.station[0].etd} />;
   }
 
   render() {
