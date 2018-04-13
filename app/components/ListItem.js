@@ -20,11 +20,11 @@ class ListItem extends Component {
   }
 
   onRowPress() {
-    Actions.employeeEdit({ employee: this.props.employee });
+    Actions.station();
   }
 
   render() {
-    const { name } = this.props.employee;
+    const { name } = this.props.station;
 
     return (
       <TouchableWithoutFeedback onPress={this.onRowPress}>

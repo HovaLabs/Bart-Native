@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
 
+import ListItem from './ListItem';
+
 class StationList extends Component {
   componentWillMount() {
     this.createDataSource(this.props);
@@ -20,7 +22,7 @@ class StationList extends Component {
   }
 
   renderRow(station) {
-    return <Text>{station.name}</Text>;
+    return <ListItem station={station} />;
   }
 
   render() {
