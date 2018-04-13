@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, ListView } from 'react-native';
 
-const StationList = props => (
-  <View>
-    {props.stationList.map(station => <Text key={station.abbr}>{JSON.stringify(station)}</Text>)}
-  </View>
-);
+class StationList extends Component {
+  componentWillMount() {
+    this.createDataSource(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.createDataSource(nextProps);
+  }
+
+  createDataSource({ employees }) {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
+
+    this.dataSource = ds.cloneWithRows(this.props.stationList);
+  }
+
+  renderRow(station) {
+    return <Text>{station.name}</Text>;
+  }
+
+  render() {
+    const { stationList } = this.props;
+
+    return <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />;
+  }
+}
 
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
