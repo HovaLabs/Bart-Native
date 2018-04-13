@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import autobind from 'react-autobind';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+
+import { selectStation } from '../actions';
 
 import { CardSection } from './common';
 
@@ -20,6 +23,7 @@ class ListItem extends Component {
   }
 
   onRowPress() {
+    this.props.selectStation(this.props.station);
     Actions.station();
   }
 
@@ -38,4 +42,4 @@ class ListItem extends Component {
   }
 }
 
-export default ListItem;
+export default connect(null, { selectStation })(ListItem);

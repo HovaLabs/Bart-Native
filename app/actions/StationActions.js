@@ -1,10 +1,10 @@
 import { Actions } from 'react-native-router-flux';
 
-import { STATION_SELECTED, STATION_INFO_UPDATED } from './types';
+import { SELECT_STATION, STATION_INFO_UPDATED } from './types';
 
-export const stationSelected = text => ({
-  type: STATION_SELECTED,
-  payload: text,
+export const selectStation = json => ({
+  type: SELECT_STATION,
+  payload: json,
 });
 
 export const stationInfoUpdated = json => ({

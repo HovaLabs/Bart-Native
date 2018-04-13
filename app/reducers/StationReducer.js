@@ -1,4 +1,4 @@
-import { STATION_SELECTED, STATION_INFO_UPDATED } from '../actions/types';
+import { SELECT_STATION, STATION_INFO_UPDATED } from '../actions/types';
 import stationList from '../stationList';
 
 const INITIAL_STATE = {
@@ -9,8 +9,8 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case STATION_SELECTED:
-      return { ...state, selectedStation: action.payload };
+    case SELECT_STATION:
+      return { ...state, stationInfo: null, selectedStation: action.payload };
     case STATION_INFO_UPDATED:
       return { ...state, stationInfo: action.payload };
     default:
