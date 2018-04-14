@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
 
+import { updateLocation } from '../actions';
+
 import { Button, CardSection } from './common';
 import ListItem from './ListItem';
 
@@ -13,7 +15,12 @@ class StationList extends Component {
       listView: 'alphabetical',
     };
   }
+
   componentWillMount() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.props.updateLocation(position);
+    });
+
     this.createDataSource(this.props);
   }
 
@@ -66,6 +73,7 @@ class StationList extends Component {
 
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
+  user: state.user,
 });
 
-export default connect(mapStateToProps)(StationList);
+export default connect(mapStateToProps, { updateLocation })(StationList);
