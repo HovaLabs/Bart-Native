@@ -22,8 +22,11 @@ const styles = {
   },
 };
 
-const Button = ({ children, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.buttonStyle}>
+const Button = ({ children, onPress, selected = false }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={selected ? { ...styles.buttonStyle, backgroundColor: '#eeeeee' } : styles.buttonStyle}
+  >
     <Text style={styles.textStyle}>{children}</Text>
   </TouchableOpacity>
 );

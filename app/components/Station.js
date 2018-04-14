@@ -42,12 +42,7 @@ class Station extends Component {
   }
 
   render() {
-    return (
-      <View>
-        <Text>{this.props.selectedStation.name}</Text>
-        {this.renderTrains()}
-      </View>
-    );
+    return <View>{this.renderTrains()}</View>;
   }
 }
 

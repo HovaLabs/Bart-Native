@@ -1,5 +1,5 @@
 import { SELECT_STATION, STATION_INFO_UPDATED } from '../actions/types';
-import stationList from '../stationList';
+import stationList from '../defaultStationList';
 
 const INITIAL_STATE = {
   selectedStation: null,
