@@ -53,14 +53,14 @@ class StationList extends Component {
             A-Z
           </Button>
           <Button
-            onPress={() => this.setState({ listView: 'north' })}
-            selected={this.state.listView === 'north'}
+            onPress={() => this.setState({ listView: 'distance' })}
+            selected={this.state.listView === 'distance'}
           >
             Distance
           </Button>
           <Button
-            onPress={() => this.setState({ listView: 'south' })}
-            selected={this.state.listView === 'south'}
+            onPress={() => this.setState({ listView: 'favorites' })}
+            selected={this.state.listView === 'favorites'}
           >
             Favorites
           </Button>
