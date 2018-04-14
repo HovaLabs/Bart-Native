@@ -24,7 +24,7 @@ class ListItem extends Component {
 
   onRowPress() {
     this.props.selectStation(this.props.station);
-    Actions.station();
+    Actions.station({ title: this.props.station.name });
   }
 
   render() {

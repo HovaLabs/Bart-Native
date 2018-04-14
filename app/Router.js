@@ -20,7 +20,7 @@ const RouterComponent = props => (
     <Scene key="root" hideNavBar>
       <Scene key="main">
         <Scene key="stationList" component={StationList} title="Station List" initial />
-        <Scene key="station" component={Station} title={props.selectedStation} />
+        <Scene key="station" component={Station} />
       </Scene>
     </Scene>
   </Router>
