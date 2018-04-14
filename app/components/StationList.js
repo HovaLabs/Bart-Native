@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
 
+import { Button, CardSection } from './common';
 import ListItem from './ListItem';
 
 class StationList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      listView: 'alphabetical',
+    };
+  }
   componentWillMount() {
     this.createDataSource(this.props);
   }
@@ -28,7 +36,31 @@ class StationList extends Component {
   render() {
     const { stationList } = this.props;
 
-    return <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />;
+    return (
+      <View>
+        <CardSection>
+          <Button
+            onPress={() => this.setState({ listView: 'alphabetical' })}
+            selected={this.state.listView === 'alphabetical'}
+          >
+            A-Z
+          </Button>
+          <Button
+            onPress={() => this.setState({ listView: 'north' })}
+            selected={this.state.listView === 'north'}
+          >
+            Distance
+          </Button>
+          <Button
+            onPress={() => this.setState({ listView: 'south' })}
+            selected={this.state.listView === 'south'}
+          >
+            Favorites
+          </Button>
+        </CardSection>
+        <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />
+      </View>
+    );
   }
 }
 
