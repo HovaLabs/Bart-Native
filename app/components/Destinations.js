@@ -14,10 +14,23 @@ class Destinations extends Component {
   }
 
   render() {
-    const destinations = this.props.destinations.filter(destination =>
-      destination.estimate[0].direction.toLowerCase().includes(this.state.directionFilter));
+    const trainList = [];
+    this.props.destinations.forEach((destination) => {
+      destination.estimate.forEach((train) => {
+        if (train.direction.toLowerCase().includes(this.state.directionFilter)) {
+          trainList.push({
+            ...train,
+            destination: destination.destination,
+            abbreviation: destination.abbreviation,
+            limited: destination.limited,
+          });
+        }
+      });
+    });
 
-    console.log(destinations);
+    trainList.sort((a, b) =>
+      (Number(a.minutes) > Number(b.minutes) ? 1 : Number(a.minutes) < Number(b.minutes) ? -1 : 0));
+
     return (
       <Card>
         <CardSection>
@@ -40,9 +53,9 @@ class Destinations extends Component {
             South
           </Button>
         </CardSection>
-        {destinations.map((destination, i) => (
+        {trainList.map((train, i) => (
           <CardSection key={i}>
-            <Train {...destination} />
+            <Train {...train} />
           </CardSection>
         ))}
       </Card>
