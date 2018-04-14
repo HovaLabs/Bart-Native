@@ -31,22 +31,6 @@ class ListItem extends Component {
     Actions.station({ title: this.props.station.name });
   }
 
-  getDistance() {
-    const { user, station } = this.props;
-    if (!user.location) {
-      return '?';
-    }
-
-    const distanceToStation = distance(
-      Number(station.gtfs_latitude),
-      Number(station.gtfs_longitude),
-      user.location.coords.latitude,
-      user.location.coords.longitude,
-    );
-
-    return Number(distanceToStation).toFixed(1);
-  }
-
   render() {
     const { user, station } = this.props;
 
@@ -59,7 +43,7 @@ class ListItem extends Component {
                 <Text style={styles.titleStyle}>{station.name}</Text>
               </View>
               <View style={{ marginLeft: 'auto' }}>
-                <Text style={styles.distanceStyle}>{this.getDistance()} miles</Text>
+                <Text style={styles.distanceStyle}>{station.distanceFromDevice || '?'} miles</Text>
               </View>
             </View>
           </CardSection>

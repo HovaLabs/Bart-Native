@@ -2,38 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
 
-import { updateLocation } from '../actions';
+import { updateStationOrder, updateDeviceLocation } from '../actions';
 
 import { Button, CardSection } from './common';
 import ListItem from './ListItem';
 
 class StationList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      listView: 'alphabetical',
-    };
-  }
-
   componentWillMount() {
     navigator.geolocation.getCurrentPosition((position) => {
-      this.props.updateLocation(position);
+      this.props.updateDeviceLocation(position);
     });
 
-    this.createDataSource(this.props);
+    this.createDataSource(this.props.stationList);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.createDataSource(nextProps);
+    this.createDataSource(nextProps.stationList);
   }
 
-  createDataSource({ employees }) {
+  createDataSource(stationList) {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
 
-    this.dataSource = ds.cloneWithRows(this.props.stationList);
+    this.dataSource = ds.cloneWithRows(stationList);
   }
 
   renderRow(station) {
@@ -41,26 +33,26 @@ class StationList extends Component {
   }
 
   render() {
-    const { stationList } = this.props;
+    const { stationList, stationOrder } = this.props;
 
     return (
       <View>
         <CardSection>
           <Button
-            onPress={() => this.setState({ listView: 'alphabetical' })}
-            selected={this.state.listView === 'alphabetical'}
+            onPress={() => this.props.updateStationOrder('alphabetical')}
+            selected={this.props.stationOrder === 'alphabetical'}
           >
             A-Z
           </Button>
           <Button
-            onPress={() => this.setState({ listView: 'distance' })}
-            selected={this.state.listView === 'distance'}
+            onPress={() => this.props.updateStationOrder('distance')}
+            selected={this.props.stationOrder === 'distance'}
           >
             Distance
           </Button>
           <Button
-            onPress={() => this.setState({ listView: 'favorites' })}
-            selected={this.state.listView === 'favorites'}
+            onPress={() => this.props.updateStationOrder('favorites')}
+            selected={this.props.stationOrder === 'favorites'}
           >
             Favorites
           </Button>
@@ -73,7 +65,7 @@ class StationList extends Component {
 
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
-  user: state.user,
+  stationOrder: state.stationInfo.stationOrder,
 });
 
-export default connect(mapStateToProps, { updateLocation })(StationList);
+export default connect(mapStateToProps, { updateDeviceLocation, updateStationOrder })(StationList);
