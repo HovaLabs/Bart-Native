@@ -362,7 +362,7 @@ const stationList = {
           zipcode: '94565',
         },
         {
-          name: 'Pleasant Hill/Contra Costa Centre',
+          name: 'Pleasant Hill/Contra Costa',
           abbr: 'PHIL',
           gtfs_latitude: '37.928468',
           gtfs_longitude: '-122.056012',
@@ -417,7 +417,7 @@ const stationList = {
           zipcode: '94066',
         },
         {
-          name: 'San Francisco International Airport',
+          name: 'San Francisco Intl. Airport',
           abbr: 'SFIA',
           gtfs_latitude: '37.615966',
           gtfs_longitude: '-122.392409',
