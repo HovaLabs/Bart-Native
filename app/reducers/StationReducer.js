@@ -31,8 +31,6 @@ function updateStationListOrder(originalStationList, order) {
     }
   });
 
-  console.log(sortedStationList);
-
   return sortedStationList;
 }
 
