@@ -10,7 +10,7 @@ const stationList = {
     stations: {
       station: [
         {
-          name: '12th St. Oakland City Center',
+          name: '12th St. Oakland',
           abbr: '12TH',
           gtfs_latitude: '37.803768',
           gtfs_longitude: '-122.271450',
@@ -329,7 +329,7 @@ const stationList = {
           zipcode: '94520',
         },
         {
-          name: 'Oakland International Airport',
+          name: 'Oakland Intl. Airport',
           abbr: 'OAKL',
           gtfs_latitude: '37.713238',
           gtfs_longitude: '-122.212191',
@@ -362,7 +362,7 @@ const stationList = {
           zipcode: '94565',
         },
         {
-          name: 'Pleasant Hill/Contra Costa',
+          name: 'Pleasant Hill',
           abbr: 'PHIL',
           gtfs_latitude: '37.928468',
           gtfs_longitude: '-122.056012',
@@ -417,7 +417,7 @@ const stationList = {
           zipcode: '94066',
         },
         {
-          name: 'San Francisco Intl. Airport',
+          name: 'San Fran Intl. Airport',
           abbr: 'SFIA',
           gtfs_latitude: '37.615966',
           gtfs_longitude: '-122.392409',
@@ -505,7 +505,7 @@ const stationList = {
           zipcode: '94607',
         },
         {
-          name: 'Warm Springs / South Fremont',
+          name: 'Warm Springs',
           abbr: 'WARM',
           gtfs_latitude: '37.502171',
           gtfs_longitude: '-121.939313',
