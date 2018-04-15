@@ -1,6 +1,8 @@
 import distance from 'gps-distance';
+import { AsyncStorage } from 'react-native';
 
 import {
+  LOAD_SAVED_STATE,
   SELECT_STATION,
   STATION_INFO_UPDATED,
   UPDATE_STATION_ORDER,
@@ -47,6 +49,26 @@ function setDistance(station, userLocation) {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case UPDATE_STATION_ORDER:
+      AsyncStorage.setItem(
+        'appState',
+        JSON.stringify({ stationOrder: action.payload, stations: state.stations }),
+      ).catch(err => console.error('Save fail', err));
+      break;
+    default:
+      break;
+  }
+
+  switch (action.type) {
+    case LOAD_SAVED_STATE:
+      if (action.payload.stationOrder !== state.stationOrder) {
+        return {
+          ...state,
+          ...action.payload,
+          stationList: updateStationListOrder(state.stationList, action.payload.stationOrder),
+        };
+      }
+      return { ...state, ...action.payload };
     case SELECT_STATION:
       return { ...state, stationInfo: null, selectedStation: action.payload };
     case STATION_INFO_UPDATED:
@@ -58,9 +80,16 @@ export default (state = INITIAL_STATE, action) => {
         stationList: updateStationListOrder(state.stationList, action.payload),
       };
     case UPDATE_DEVICE_LOCATION:
+      const stationList = state.stationList.map(station => setDistance(station, action.payload));
+      if (state.stationOrder === 'distance') {
+        return {
+          ...state,
+          stationList: updateStationListOrder(stationList, 'distance'),
+        };
+      }
       return {
         ...state,
-        stationList: state.stationList.map(station => setDistance(station, action.payload)),
+        stationList,
       };
     default:
       return state;

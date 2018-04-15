@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Scene, Router, Actions } from 'react-native-router-flux';
-import { Platform } from 'react-native';
+import { Platform, AsyncStorage } from 'react-native';
+
+import { loadSavedState } from './actions';
+import defaultStorage from './defaultStorage';
 
 import Station from './components/Station';
 import StationList from './components/StationList';
@@ -15,19 +18,36 @@ const styles = {
   },
 };
 
-const RouterComponent = props => (
-  <Router navigationBarStyle={styles.navBar} sceneStyle={styles.sceneStyle}>
-    <Scene key="root" hideNavBar>
-      <Scene key="main">
-        <Scene key="stationList" component={StationList} title="Station List" initial />
-        <Scene key="station" component={Station} />
-      </Scene>
-    </Scene>
-  </Router>
-);
+class RouterComponent extends Component {
+  async componentDidMount() {
+    try {
+      const savedState = await AsyncStorage.getItem('appState');
+      if (savedState) {
+        this.props.loadSavedState(JSON.parse(savedState));
+      } else {
+        AsyncStorage.setItem('appState', JSON.stringify(defaultStorage));
+      }
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+  render() {
+    return (
+      <Router navigationBarStyle={styles.navBar} sceneStyle={styles.sceneStyle}>
+        <Scene key="root" hideNavBar>
+          <Scene key="main">
+            <Scene key="stationList" component={StationList} title="Station List" initial />
+            <Scene key="station" component={Station} />
+          </Scene>
+        </Scene>
+      </Router>
+    );
+  }
+}
 
 mapStateToProps = state => ({
   selectedStation: state.selectedStation,
 });
 
-export default connect(mapStateToProps)(RouterComponent);
+export default connect(mapStateToProps, { loadSavedState })(RouterComponent);
