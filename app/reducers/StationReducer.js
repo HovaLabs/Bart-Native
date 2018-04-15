@@ -49,17 +49,6 @@ function setDistance(station, userLocation) {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case UPDATE_STATION_ORDER:
-      AsyncStorage.setItem(
-        'appState',
-        JSON.stringify({ stationOrder: action.payload, stations: state.stations }),
-      ).catch(err => console.error('Save fail', err));
-      break;
-    default:
-      break;
-  }
-
-  switch (action.type) {
     case LOAD_SAVED_STATE:
       if (action.payload.stationOrder !== state.stationOrder) {
         return {
@@ -70,10 +59,24 @@ export default (state = INITIAL_STATE, action) => {
       }
       return { ...state, ...action.payload };
     case SELECT_STATION:
-      return { ...state, stationInfo: null, selectedStation: action.payload };
+      const stations = Object.assign({}, state.stations);
+      stations[action.payload.abbr].visits += 1;
+      AsyncStorage.setItem(
+        'appState',
+        JSON.stringify({ stationOrder: state.stationOrder, stations }),
+      ).catch(err => console.error('Save fail', err));
+
+      return {
+        ...state, stationInfo: null, selectedStation: action.payload, stations,
+      };
     case STATION_INFO_UPDATED:
       return { ...state, stationInfo: action.payload };
     case UPDATE_STATION_ORDER:
+      AsyncStorage.setItem(
+        'appState',
+        JSON.stringify({ stationOrder: action.payload, stations: state.stations }),
+      ).catch(err => console.error('Save fail', err));
+
       return {
         ...state,
         stationOrder: action.payload,
