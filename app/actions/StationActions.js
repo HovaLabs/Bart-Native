@@ -6,6 +6,7 @@ import {
   STATION_INFO_UPDATED,
   UPDATE_STATION_ORDER,
   UPDATE_DEVICE_LOCATION,
+  UPDATE_STATION_DIRECTION,
 } from './types';
 
 export const loadSavedState = json => ({
@@ -31,4 +32,9 @@ export const updateStationOrder = order => ({
 export const updateDeviceLocation = json => ({
   type: UPDATE_DEVICE_LOCATION,
   payload: json,
+});
+
+export const updateStationDirection = (abbr, direction) => ({
+  type: UPDATE_STATION_DIRECTION,
+  payload: { abbr, direction },
 });

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { connect } from 'react-redux';
+
+import { updateStationDirection } from '../actions';
 
 import { Card, CardSection, Button } from './common';
 import Train from './Train';
@@ -9,7 +12,7 @@ class Destinations extends Component {
     super(props);
 
     this.state = {
-      directionFilter: '',
+      directionFilter: props.station.direction || '',
     };
   }
 
@@ -35,19 +38,28 @@ class Destinations extends Component {
       <Card>
         <CardSection>
           <Button
-            onPress={() => this.setState({ directionFilter: '' })}
+            onPress={() => {
+              this.props.updateStationDirection(this.props.abbr, '');
+              this.setState({ directionFilter: '' });
+            }}
             selected={this.state.directionFilter === ''}
           >
             All
           </Button>
           <Button
-            onPress={() => this.setState({ directionFilter: 'north' })}
+            onPress={() => {
+              this.props.updateStationDirection(this.props.abbr, 'north');
+              this.setState({ directionFilter: 'north' });
+            }}
             selected={this.state.directionFilter === 'north'}
           >
             North
           </Button>
           <Button
-            onPress={() => this.setState({ directionFilter: 'south' })}
+            onPress={() => {
+              this.props.updateStationDirection(this.props.abbr, 'south');
+              this.setState({ directionFilter: 'south' });
+            }}
             selected={this.state.directionFilter === 'south'}
           >
             South
@@ -62,4 +74,4 @@ class Destinations extends Component {
     );
   }
 }
-export default Destinations;
+export default connect(null, { updateStationDirection })(Destinations);

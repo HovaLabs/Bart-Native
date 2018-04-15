@@ -38,7 +38,13 @@ class Station extends Component {
       return null;
     }
 
-    return <Destinations destinations={this.props.stationInfo.root.station[0].etd} />;
+    return (
+      <Destinations
+        abbr={this.props.selectedStation.abbr}
+        destinations={this.props.stationInfo.root.station[0].etd}
+        station={this.props.stations[this.props.selectedStation.abbr]}
+      />
+    );
   }
 
   render() {
@@ -49,6 +55,7 @@ class Station extends Component {
 const mapStateToProps = state => ({
   selectedStation: state.stationInfo.selectedStation,
   stationInfo: state.stationInfo.stationInfo,
+  stations: state.stationInfo.stations,
 });
 
 export default connect(mapStateToProps, { stationInfoUpdated })(Station);

@@ -7,7 +7,9 @@ import {
   STATION_INFO_UPDATED,
   UPDATE_STATION_ORDER,
   UPDATE_DEVICE_LOCATION,
+  UPDATE_STATION_DIRECTION,
 } from '../actions/types';
+
 import stationList from '../defaultStationList';
 
 const INITIAL_STATE = {
@@ -49,7 +51,7 @@ function setDistance(station, userLocation) {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case LOAD_SAVED_STATE:
+    case LOAD_SAVED_STATE: {
       if (action.payload.stationOrder !== state.stationOrder) {
         return {
           ...state,
@@ -58,7 +60,8 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       return { ...state, ...action.payload };
-    case SELECT_STATION:
+    }
+    case SELECT_STATION: {
       const stations = Object.assign({}, state.stations);
       stations[action.payload.abbr].visits += 1;
       AsyncStorage.setItem(
@@ -67,11 +70,16 @@ export default (state = INITIAL_STATE, action) => {
       ).catch(err => console.error('Save fail', err));
 
       return {
-        ...state, stationInfo: null, selectedStation: action.payload, stations,
+        ...state,
+        stationInfo: null,
+        selectedStation: action.payload,
+        stations,
       };
-    case STATION_INFO_UPDATED:
+    }
+    case STATION_INFO_UPDATED: {
       return { ...state, stationInfo: action.payload };
-    case UPDATE_STATION_ORDER:
+    }
+    case UPDATE_STATION_ORDER: {
       AsyncStorage.setItem(
         'appState',
         JSON.stringify({ stationOrder: action.payload, stations: state.stations }),
@@ -82,7 +90,8 @@ export default (state = INITIAL_STATE, action) => {
         stationOrder: action.payload,
         stationList: updateStationListOrder(state.stationList, action.payload),
       };
-    case UPDATE_DEVICE_LOCATION:
+    }
+    case UPDATE_DEVICE_LOCATION: {
       const stationList = state.stationList.map(station => setDistance(station, action.payload));
       if (state.stationOrder === 'distance') {
         return {
@@ -94,7 +103,17 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         stationList,
       };
-    default:
+    }
+    case UPDATE_STATION_DIRECTION: {
+      const stations = Object.assign({}, state.stations);
+      stations[action.payload.abbr].direction = action.payload.direction;
+      AsyncStorage.setItem(
+        'appState',
+        JSON.stringify({ stationOrder: state.stationOrder, stations }),
+      ).catch(err => console.error('Save fail', err));
+    }
+    default: {
       return state;
+    }
   }
 };
