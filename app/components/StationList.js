@@ -4,18 +4,16 @@ import { View, Text, ListView } from 'react-native';
 
 import { updateStationOrder, updateDeviceLocation } from '../actions';
 
-import { Button, Card, CardSection } from './common';
+import { Button, CardSection } from './common';
 import ListItem from './ListItem';
 
 class StationList extends Component {
   componentWillMount() {
-    this.createDataSource(this.props.stationList);
-  }
-
-  componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
       this.props.updateDeviceLocation(position);
     });
+
+    this.createDataSource(this.props.stationList);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,7 +36,7 @@ class StationList extends Component {
     const { stationList, stationOrder } = this.props;
 
     return (
-      <Card>
+      <View>
         <CardSection>
           <Button
             onPress={() => this.props.updateStationOrder('alphabetical')}
@@ -59,13 +57,8 @@ class StationList extends Component {
             Favorites
           </Button>
         </CardSection>
-        <ListView
-          style={{ marginBottom: 53 }}
-          enableEmptySections
-          dataSource={this.dataSource}
-          renderRow={this.renderRow}
-        />
-      </Card>
+        <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />
+      </View>
     );
   }
 }
