@@ -15,18 +15,20 @@ import {
 } from './types';
 
 function* pingStation(action) {
-  const stationUrl = `https://api.bart.gov/api/etd.aspx?cmd=etd&orig=${
-    action.payload
-  }&key=MW9S-E7SL-26DU-VV8V&json=y`;
-  const body = yield fetch(stationUrl);
-  console.log('two');
-  const payload = yield body.json();
-  console.log('three');
-  yield put({ type: UPDATE_STATION_ETDS, payload });
+  try {
+    const stationUrl = `https://api.bart.gov/api/etd.aspx?cmd=etd&orig=${
+      action.payload
+    }&key=MW9S-E7SL-26DU-VV8V&json=y`;
+    const body = yield fetch(stationUrl);
+    const payload = yield body.json();
+    yield put({ type: UPDATE_STATION_ETDS, payload });
+  } catch (ex) {
+    // If the request fails and there is no prior data
+    // loading icon?
+  }
 }
 
 function* watchPingStation() {
-  console.log('watchin');
   yield takeLatest(PING_STATION, pingStation);
 }
 
