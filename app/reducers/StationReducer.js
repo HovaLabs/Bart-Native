@@ -6,7 +6,7 @@ import {
   LOAD_SAVED_STATE,
   SELECT_STATION,
   UPDATE_STATION_ETDS,
-  UPDATE_STATION_ORDER,
+  UPDATE_STATION_LIST_FILTER,
   UPDATE_DEVICE_LOCATION,
   UPDATE_STATION_DIRECTION,
   UPDATE_SAVED_STATE,
@@ -23,7 +23,7 @@ function getPersistentDataFromState(state) {
   return pick(state, ['stationOrder', 'stationList']);
 }
 
-function updateStationOrder(originalStationList, order, persistentStations) {
+function updateStationListFilter(originalStationList, order, persistentStations) {
   const sortedStationList = Object.assign([], originalStationList);
   sortedStationList.sort((a, b) => {
     switch (order) {
@@ -66,22 +66,25 @@ export default (state = INITIAL_STATE, action) => {
       const newState = {
         ...state,
         ...action.payload,
-        stationList: updateStationOrder(action.payload.stationList, action.payload.stationOrder),
+        stationList: updateStationListFilter(
+          action.payload.stationList,
+          action.payload.stationOrder,
+        ),
       };
       return newState;
     }
     case UPDATE_SAVED_STATE: {
-      console.log(state.stationList[0]);
       const newState = {
         ...state,
         ...action.payload,
-        stationList: updateStationOrder(action.payload.stationList, action.payload.stationOrder),
+        stationList: updateStationListFilter(
+          action.payload.stationList,
+          action.payload.stationOrder,
+        ),
       };
-      console.log(newState.stationList[0]);
       return newState;
     }
     case UPDATE_STATION_ETDS: {
-      console.log('sweeee', action);
       return { ...state, stationInfo: action.payload };
     }
     case UPDATE_DEVICE_LOCATION: {
@@ -89,7 +92,7 @@ export default (state = INITIAL_STATE, action) => {
       if (state.stationOrder === 'distance') {
         return {
           ...state,
-          stationList: updateStationOrder(stationList, 'distance'),
+          stationList: updateStationListFilter(stationList, 'distance'),
         };
       }
       return {
@@ -97,7 +100,7 @@ export default (state = INITIAL_STATE, action) => {
         stationList,
       };
     }
-    case UPDATE_STATION_ORDER: {
+    case UPDATE_STATION_LIST_FILTER: {
       AsyncStorage.getItem('appData').then((persistentDataString) => {
         const persistentData = JSON.parse(persistentDataString);
         persistentData.stationOrder = action.payload;
@@ -107,7 +110,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         stationOrder: action.payload,
-        stationList: updateStationOrder(state.stationList, action.payload),
+        stationList: updateStationListFilter(state.stationList, action.payload),
       };
     }
     case SELECT_STATION: {

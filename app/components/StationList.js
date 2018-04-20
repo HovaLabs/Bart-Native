@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
 
-import { updateStationOrder, updateDeviceLocation } from '../actions';
+import { updateStationListFilter, updateDeviceLocation } from '../actions';
 
 import { Button, CardSection } from './common';
 import ListItem from './ListItem';
@@ -39,19 +39,19 @@ class StationList extends Component {
       <View style={{ marginBottom: 53 }}>
         <CardSection>
           <Button
-            onPress={() => this.props.updateStationOrder('alphabetical')}
+            onPress={() => this.props.updateStationListFilter('alphabetical')}
             selected={this.props.stationOrder === 'alphabetical'}
           >
             A-Z
           </Button>
           <Button
-            onPress={() => this.props.updateStationOrder('distance')}
+            onPress={() => this.props.updateStationListFilter('distance')}
             selected={this.props.stationOrder === 'distance'}
           >
             Distance
           </Button>
           <Button
-            onPress={() => this.props.updateStationOrder('favorites')}
+            onPress={() => this.props.updateStationListFilter('favorites')}
             selected={this.props.stationOrder === 'favorites'}
           >
             Favorites
@@ -68,4 +68,4 @@ const mapStateToProps = state => ({
   stationOrder: state.stationInfo.stationOrder,
 });
 
-export default connect(mapStateToProps, { updateDeviceLocation, updateStationOrder })(StationList);
+export default connect(mapStateToProps, { updateDeviceLocation, updateStationListFilter })(StationList);

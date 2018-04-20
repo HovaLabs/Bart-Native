@@ -36,3 +36,13 @@ export const updateStationEtds = json => ({
   type: UPDATE_STATION_ETDS,
   payload: json,
 });
+
+export const updateStationDirection = direction => ({
+  type: UPDATE_STATION_DIRECTION,
+  payload: direction,
+});
+
+export const updateStationListFilter = filter => ({
+  type: UPDATE_STATION_LIST_FILTER,
+  payload: filter,
+});
