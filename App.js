@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 
 import Router from './app/Router';
 import reducers from './app/reducers';
+
+import rootSaga from './app/actions/sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 
 class App extends Component {
   componentDidMount() {
@@ -12,7 +16,8 @@ class App extends Component {
   }
 
   render() {
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+    const store = createStore(reducers, {}, applyMiddleware(sagaMiddleware));
+    sagaMiddleware.run(rootSaga);
 
     return (
       <Provider store={store}>

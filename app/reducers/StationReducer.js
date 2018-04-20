@@ -1,25 +1,29 @@
 import distance from 'gps-distance';
 import { AsyncStorage } from 'react-native';
+import { pick } from 'lodash';
 
 import {
   LOAD_SAVED_STATE,
   SELECT_STATION,
-  STATION_INFO_UPDATED,
+  UPDATE_STATION_ETDS,
   UPDATE_STATION_ORDER,
   UPDATE_DEVICE_LOCATION,
   UPDATE_STATION_DIRECTION,
+  UPDATE_SAVED_STATE,
 } from '../actions/types';
-
-import stationList from '../defaultStationList';
 
 const INITIAL_STATE = {
   selectedStation: null,
   stationInfo: null,
   stationOrder: 'alphabetical',
-  stationList: stationList.root.stations.station,
+  stationList: [],
 };
 
-function updateStationListOrder(originalStationList, order) {
+function getPersistentDataFromState(state) {
+  return pick(state, ['stationOrder', 'stationList']);
+}
+
+function updateStationOrder(originalStationList, order, persistentStations) {
   const sortedStationList = Object.assign([], originalStationList);
   sortedStationList.sort((a, b) => {
     switch (order) {
@@ -31,7 +35,14 @@ function updateStationListOrder(originalStationList, order) {
           : Number(a.distanceFromDevice) < Number(b.distanceFromDevice)
             ? -1
             : 0;
+      case 'favorites':
+        return Number(a.visits) < Number(b.visits)
+          ? 1
+          : Number(a.visits) > Number(b.visits)
+            ? -1
+            : 0;
       default:
+        return 0;
     }
   });
 
@@ -40,8 +51,8 @@ function updateStationListOrder(originalStationList, order) {
 
 function setDistance(station, userLocation) {
   const distanceFromDevice = Number(distance(
-    Number(station.gtfs_latitude),
-    Number(station.gtfs_longitude),
+    Number(station.latitude),
+    Number(station.longitude),
     userLocation.coords.latitude,
     userLocation.coords.longitude,
   )).toFixed(1);
@@ -52,51 +63,33 @@ function setDistance(station, userLocation) {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOAD_SAVED_STATE: {
-      if (action.payload.stationOrder !== state.stationOrder) {
-        return {
-          ...state,
-          ...action.payload,
-          stationList: updateStationListOrder(state.stationList, action.payload.stationOrder),
-        };
-      }
-      return { ...state, ...action.payload };
-    }
-    case SELECT_STATION: {
-      const stations = Object.assign({}, state.stations);
-      stations[action.payload.abbr].visits += 1;
-      AsyncStorage.setItem(
-        'appState',
-        JSON.stringify({ stationOrder: state.stationOrder, stations }),
-      ).catch(err => console.error('Save fail', err));
-
-      return {
+      const newState = {
         ...state,
-        stationInfo: null,
-        selectedStation: action.payload,
-        stations,
+        ...action.payload,
+        stationList: updateStationOrder(action.payload.stationList, action.payload.stationOrder),
       };
+      return newState;
     }
-    case STATION_INFO_UPDATED: {
+    case UPDATE_SAVED_STATE: {
+      console.log(state.stationList[0]);
+      const newState = {
+        ...state,
+        ...action.payload,
+        stationList: updateStationOrder(action.payload.stationList, action.payload.stationOrder),
+      };
+      console.log(newState.stationList[0]);
+      return newState;
+    }
+    case UPDATE_STATION_ETDS: {
+      console.log('sweeee', action);
       return { ...state, stationInfo: action.payload };
-    }
-    case UPDATE_STATION_ORDER: {
-      AsyncStorage.setItem(
-        'appState',
-        JSON.stringify({ stationOrder: action.payload, stations: state.stations }),
-      ).catch(err => console.error('Save fail', err));
-
-      return {
-        ...state,
-        stationOrder: action.payload,
-        stationList: updateStationListOrder(state.stationList, action.payload),
-      };
     }
     case UPDATE_DEVICE_LOCATION: {
       const stationList = state.stationList.map(station => setDistance(station, action.payload));
       if (state.stationOrder === 'distance') {
         return {
           ...state,
-          stationList: updateStationListOrder(stationList, 'distance'),
+          stationList: updateStationOrder(stationList, 'distance'),
         };
       }
       return {
@@ -104,13 +97,24 @@ export default (state = INITIAL_STATE, action) => {
         stationList,
       };
     }
-    case UPDATE_STATION_DIRECTION: {
-      const stations = Object.assign({}, state.stations);
-      stations[action.payload.abbr].direction = action.payload.direction;
-      AsyncStorage.setItem(
-        'appState',
-        JSON.stringify({ stationOrder: state.stationOrder, stations }),
-      ).catch(err => console.error('Save fail', err));
+    case UPDATE_STATION_ORDER: {
+      AsyncStorage.getItem('appData').then((persistentDataString) => {
+        const persistentData = JSON.parse(persistentDataString);
+        persistentData.stationOrder = action.payload;
+        AsyncStorage.setItem('appData', JSON.stringify(persistentData));
+      });
+
+      return {
+        ...state,
+        stationOrder: action.payload,
+        stationList: updateStationOrder(state.stationList, action.payload),
+      };
+    }
+    case SELECT_STATION: {
+      return {
+        ...state,
+        selectedStation: action.payload,
+      };
     }
     default: {
       return state;

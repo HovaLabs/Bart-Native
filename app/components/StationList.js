@@ -36,7 +36,7 @@ class StationList extends Component {
     const { stationList, stationOrder } = this.props;
 
     return (
-      <View>
+      <View style={{ marginBottom: 53 }}>
         <CardSection>
           <Button
             onPress={() => this.props.updateStationOrder('alphabetical')}
