@@ -32,6 +32,23 @@ function* watchPingStation() {
   yield takeLatest(PING_STATION, pingStation);
 }
 
+function* selectStation(action) {
+  const savedStateString = yield AsyncStorage.getItem('appData');
+  const savedState = JSON.parse(savedStateString);
+  savedState.stationList.forEach((station) => {
+    if (station.abbr === action.payload.abbr) {
+      station.visits += 1;
+    }
+  });
+
+  yield AsyncStorage.setItem('appData', JSON.stringify(savedState));
+  yield put({ type: UPDATE_SAVED_STATE, payload: savedState });
+}
+
+function* watchSelectStation() {
+  yield takeEvery(SELECT_STATION, selectStation);
+}
+
 export default function* rootSaga() {
-  yield all([watchPingStation()]);
+  yield all([watchPingStation(), watchSelectStation()]);
 }

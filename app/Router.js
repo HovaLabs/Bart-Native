@@ -20,6 +20,7 @@ const styles = {
 
 class RouterComponent extends Component {
   async componentDidMount() {
+    // await AsyncStorage.clear();
     try {
       const savedState = await AsyncStorage.getItem('appData');
       if (savedState) {

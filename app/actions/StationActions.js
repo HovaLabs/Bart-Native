@@ -27,9 +27,14 @@ export const loadSavedState = json => ({
   payload: json,
 });
 
-export const selectStation = json => ({
-  type: SELECT_STATION,
+export const updateSavedState = json => ({
+  type: UPDATE_SAVED_STATE,
   payload: json,
+});
+
+export const selectStation = payload => ({
+  type: SELECT_STATION,
+  payload,
 });
 
 export const updateStationEtds = json => ({
