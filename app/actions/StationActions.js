@@ -1,32 +1,20 @@
 import { Actions } from 'react-native-router-flux';
+import { AsyncStorage } from 'react-native';
 
 import {
-  LOAD_SAVED_STATE,
-  SELECT_STATION,
-  STATION_INFO_UPDATED,
-  UPDATE_STATION_ORDER,
   UPDATE_DEVICE_LOCATION,
+  LOAD_SAVED_STATE,
+  UPDATE_SAVED_STATE,
+  SELECT_STATION,
+  UPDATE_STATION_ETDS,
+  UPDATE_STATION_LIST_FILTER,
   UPDATE_STATION_DIRECTION,
+  PING_STATION,
 } from './types';
 
-export const loadSavedState = json => ({
-  type: LOAD_SAVED_STATE,
-  payload: json,
-});
-
-export const selectStation = json => ({
-  type: SELECT_STATION,
-  payload: json,
-});
-
-export const stationInfoUpdated = json => ({
-  type: STATION_INFO_UPDATED,
-  payload: json,
-});
-
-export const updateStationOrder = order => ({
-  type: UPDATE_STATION_ORDER,
-  payload: order,
+export const pingStation = station => ({
+  type: PING_STATION,
+  payload: station,
 });
 
 export const updateDeviceLocation = json => ({
@@ -34,7 +22,35 @@ export const updateDeviceLocation = json => ({
   payload: json,
 });
 
+export const loadSavedState = json => ({
+  type: LOAD_SAVED_STATE,
+  payload: json,
+});
+
+export const updateSavedState = json => ({
+  type: UPDATE_SAVED_STATE,
+  payload: json,
+});
+
+export const selectStation = payload => ({
+  type: SELECT_STATION,
+  payload,
+});
+
+export const updateStationEtds = json => ({
+  type: UPDATE_STATION_ETDS,
+  payload: json,
+});
+
 export const updateStationDirection = (abbr, direction) => ({
   type: UPDATE_STATION_DIRECTION,
-  payload: { abbr, direction },
+  payload: {
+    abbr,
+    direction,
+  },
+});
+
+export const updateStationListFilter = filter => ({
+  type: UPDATE_STATION_LIST_FILTER,
+  payload: filter,
 });

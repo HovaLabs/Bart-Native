@@ -4,7 +4,7 @@ import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Platform, AsyncStorage } from 'react-native';
 
 import { loadSavedState } from './actions';
-import defaultStorage from './defaultStorage';
+import * as defaultData from './defaultData';
 
 import Station from './components/Station';
 import StationList from './components/StationList';
@@ -20,12 +20,14 @@ const styles = {
 
 class RouterComponent extends Component {
   async componentDidMount() {
+    // await AsyncStorage.clear();
     try {
-      const savedState = await AsyncStorage.getItem('appState');
+      const savedState = await AsyncStorage.getItem('appData');
       if (savedState) {
-        this.props.loadSavedState(JSON.parse(savedState));
+        this.props.loadSavedState({ ...defaultData, ...JSON.parse(savedState) });
       } else {
-        AsyncStorage.setItem('appState', JSON.stringify(defaultStorage));
+        await AsyncStorage.setItem('appData', JSON.stringify(defaultData));
+        this.props.loadSavedState(defaultData);
       }
     } catch (ex) {
       console.error(ex);
