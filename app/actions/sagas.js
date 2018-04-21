@@ -3,6 +3,8 @@ import { Actions } from 'react-native-router-flux';
 import { delay } from 'redux-saga';
 import { put, takeEvery, takeLatest, all, takeLeading, call } from 'redux-saga/effects';
 
+import distance from 'gps-distance';
+
 import {
   UPDATE_DEVICE_LOCATION,
   LOAD_SAVED_STATE,
@@ -13,6 +15,17 @@ import {
   UPDATE_STATION_DIRECTION,
   PING_STATION,
 } from './types';
+
+function setDistance(station, userLocation) {
+  const distanceFromDevice = Number(distance(
+    Number(station.latitude),
+    Number(station.longitude),
+    userLocation.coords.latitude,
+    userLocation.coords.longitude,
+  )).toFixed(1);
+
+  return { ...station, distanceFromDevice };
+}
 
 function* pingStation(action) {
   try {
@@ -42,6 +55,7 @@ function* selectStation(action) {
   });
 
   yield AsyncStorage.setItem('appData', JSON.stringify(savedState));
+  yield call(delay, 500); // Hide new favorite until new page animation is complete
   yield put({ type: UPDATE_SAVED_STATE, payload: savedState });
 }
 
@@ -49,6 +63,50 @@ function* watchSelectStation() {
   yield takeEvery(SELECT_STATION, selectStation);
 }
 
+function* updateDeviceLocation(action) {
+  const savedStateString = yield AsyncStorage.getItem('appData');
+  const savedState = JSON.parse(savedStateString);
+
+  savedState.stationList = savedState.stationList.map(station =>
+    setDistance(station, action.payload));
+
+  yield AsyncStorage.setItem('appData', JSON.stringify(savedState));
+  yield put({ type: UPDATE_SAVED_STATE, payload: savedState });
+}
+
+function* watchUpdateDeviceLocation() {
+  yield takeEvery(UPDATE_DEVICE_LOCATION, updateDeviceLocation);
+}
+
+function* updateStationDirection(action) {
+  const { abbr, direction } = action.payload;
+
+  const savedStateString = yield AsyncStorage.getItem('appData');
+  const savedState = JSON.parse(savedStateString);
+
+  let updated = false;
+  savedState.stationList.forEach((station) => {
+    if ((station.abbr === abbr) & (station.direction !== direction)) {
+      updated = true;
+      station.direction = direction;
+    }
+  });
+
+  if (updated) {
+    yield AsyncStorage.setItem('appData', JSON.stringify(savedState));
+    yield put({ type: UPDATE_SAVED_STATE, payload: savedState });
+  }
+}
+
+function* watchUpdateStationDirection() {
+  yield takeEvery(UPDATE_STATION_DIRECTION, updateStationDirection);
+}
+
 export default function* rootSaga() {
-  yield all([watchPingStation(), watchSelectStation()]);
+  yield all([
+    watchPingStation(),
+    watchSelectStation(),
+    watchUpdateDeviceLocation(),
+    watchUpdateStationDirection(),
+  ]);
 }

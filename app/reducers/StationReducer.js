@@ -1,4 +1,3 @@
-import distance from 'gps-distance';
 import { AsyncStorage } from 'react-native';
 import { pick } from 'lodash';
 
@@ -49,17 +48,6 @@ function updateStationListFilter(originalStationList, order, persistentStations)
   return sortedStationList;
 }
 
-function setDistance(station, userLocation) {
-  const distanceFromDevice = Number(distance(
-    Number(station.latitude),
-    Number(station.longitude),
-    userLocation.coords.latitude,
-    userLocation.coords.longitude,
-  )).toFixed(1);
-
-  return { ...station, distanceFromDevice };
-}
-
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOAD_SAVED_STATE: {
@@ -86,19 +74,6 @@ export default (state = INITIAL_STATE, action) => {
     }
     case UPDATE_STATION_ETDS: {
       return { ...state, stationInfo: action.payload };
-    }
-    case UPDATE_DEVICE_LOCATION: {
-      const stationList = state.stationList.map(station => setDistance(station, action.payload));
-      if (state.stationOrder === 'distance') {
-        return {
-          ...state,
-          stationList: updateStationListFilter(stationList, 'distance'),
-        };
-      }
-      return {
-        ...state,
-        stationList,
-      };
     }
     case UPDATE_STATION_LIST_FILTER: {
       AsyncStorage.getItem('appData').then((persistentDataString) => {

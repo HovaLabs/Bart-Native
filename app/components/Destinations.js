@@ -39,7 +39,7 @@ class Destinations extends Component {
         <CardSection>
           <Button
             onPress={() => {
-              this.props.updateStationDirection(this.props.abbr, '');
+              this.props.updateStationDirection(this.props.station.abbr, '');
               this.setState({ directionFilter: '' });
             }}
             selected={this.state.directionFilter === ''}
@@ -48,7 +48,7 @@ class Destinations extends Component {
           </Button>
           <Button
             onPress={() => {
-              this.props.updateStationDirection(this.props.abbr, 'north');
+              this.props.updateStationDirection(this.props.station.abbr, 'north');
               this.setState({ directionFilter: 'north' });
             }}
             selected={this.state.directionFilter === 'north'}
@@ -57,7 +57,7 @@ class Destinations extends Component {
           </Button>
           <Button
             onPress={() => {
-              this.props.updateStationDirection(this.props.abbr, 'south');
+              this.props.updateStationDirection(this.props.station.abbr, 'south');
               this.setState({ directionFilter: 'south' });
             }}
             selected={this.state.directionFilter === 'south'}
