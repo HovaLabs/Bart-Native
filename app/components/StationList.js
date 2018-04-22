@@ -36,11 +36,13 @@ class StationList extends Component {
       this.props.updateDeviceLocation(position);
     });
 
-    this.createDataSource(this.props.stationList);
+    const stationList = this.props.stationList.map((station, i) => ({ ...station, index: i }));
+    this.createDataSource(stationList);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.createDataSource(nextProps.stationList);
+    const stationList = nextProps.stationList.map((station, i) => ({ ...station, index: i }));
+    this.createDataSource(stationList);
   }
 
   createDataSource(stationList) {
