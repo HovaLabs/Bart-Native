@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
+import { Colors } from '../Variables';
 
 import { updateStationListFilter, updateDeviceLocation } from '../actions';
 
@@ -61,7 +62,7 @@ class StationList extends Component {
     const { stationList, stationOrder } = this.props;
 
     return (
-      <View style={{ marginBottom: 53 }}>
+      <View style={{ backgroundColor: Colors.gray }}>
         <StationsFilter {...this.props} />
         <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />
       </View>
