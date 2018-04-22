@@ -2,7 +2,7 @@ export const stationOrder = 'alphabetical';
 
 export const stationList = [
   {
-    name: '12th St. Oakland City Center',
+    name: '12th St. Oakland',
     abbr: '12TH',
     latitude: '37.803768',
     longitude: '-122.271450',
@@ -108,7 +108,7 @@ export const stationList = [
     longitude: '-122.466233',
     direction: '',
     visits: 0,
-    northStations: ['COLM'],
+    northStations: ['DALY'],
     southStations: ['SSAN'],
   },
   {
@@ -292,7 +292,7 @@ export const stationList = [
     southStations: ['CONC'],
   },
   {
-    name: 'Oakland International Airport',
+    name: "Oakland Int'l Airport",
     abbr: 'OAKL',
     latitude: '37.713238',
     longitude: '-122.212191',
@@ -322,7 +322,7 @@ export const stationList = [
     southStations: ['NCON'],
   },
   {
-    name: 'Pleasant Hill/Contra Costa',
+    name: 'Pleasant Hill',
     abbr: 'PHIL',
     latitude: '37.928468',
     longitude: '-122.056012',
@@ -372,7 +372,7 @@ export const stationList = [
     southStations: ['SFIA', 'MLBR'],
   },
   {
-    name: 'San Francisco Intl. Airport',
+    name: "San Fran Int'l Airport",
     abbr: 'SFIA',
     latitude: '37.615966',
     longitude: '-122.392409',
@@ -452,7 +452,7 @@ export const stationList = [
     southStations: ['EMBR'],
   },
   {
-    name: 'Warm Springs / South Fremont',
+    name: 'Warm Springs',
     abbr: 'WARM',
     latitude: '37.502171',
     longitude: '-121.939313',
