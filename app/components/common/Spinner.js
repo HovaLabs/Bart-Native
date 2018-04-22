@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import PropTypes from 'prop-types';
 
 const styles = {
   spinnerStyle: {
@@ -15,4 +16,8 @@ const Spinner = ({ size }) => (
   </View>
 );
 
-export { Spinner };
+Spinner.propTypes = {
+  size: PropTypes.string.isRequired,
+};
+
+export { Spinner }; // eslint-disable-line import/prefer-default-export

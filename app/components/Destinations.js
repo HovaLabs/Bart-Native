@@ -52,7 +52,6 @@ class Destinations extends Component {
         key={abbr}
         onPress={() => {
           const selectedStation = this.props.stationList.find(station => station.abbr === abbr);
-          console.log('selectedStation???', selectedStation, abbr);
           this.props.selectStation(selectedStation);
           Actions.refresh({ title: selectedStation.name });
         }}
@@ -63,32 +62,30 @@ class Destinations extends Component {
   }
 
   renderButtons() {
-    const { station, updateStationDirection } = this.props;
-
     return (
       <Card>
         <CardSection>
           <Button
             onPress={() => {
-              updateStationDirection(station.abbr, '');
+              this.props.updateStationDirection(this.props.station.abbr, '');
             }}
-            selected={station.direction === ''}
+            selected={this.props.station.direction === ''}
           >
             All
           </Button>
           <Button
             onPress={() => {
-              updateStationDirection(station.abbr, 'north');
+              this.props.updateStationDirection(this.props.station.abbr, 'north');
             }}
-            selected={station.direction === 'north'}
+            selected={this.props.station.direction === 'north'}
           >
             North
           </Button>
           <Button
             onPress={() => {
-              updateStationDirection(station.abbr, 'south');
+              this.props.updateStationDirection(this.props.station.abbr, 'south');
             }}
-            selected={station.direction === 'south'}
+            selected={this.props.station.direction === 'south'}
           >
             South
           </Button>
@@ -109,8 +106,6 @@ class Destinations extends Component {
   }
 
   render() {
-    const { station, updateStationDirection } = this.props;
-
     return (
       <View>
         <View>{this.renderButtons()}</View>
@@ -130,6 +125,16 @@ const mapStateToProps = state => ({
 });
 
 Destinations.propTypes = {
+  station: PropTypes.shape({
+    name: PropTypes.string,
+    abbr: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    direction: PropTypes.string,
+    visits: PropTypes.number,
+    northStations: PropTypes.arrayOf(PropTypes.string),
+    southStations: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
   stationList: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateStationDirection: PropTypes.func.isRequired,
   selectStation: PropTypes.func.isRequired,

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../Variables';
 
 const styles = {
@@ -19,4 +21,13 @@ const CardSection = (props) => {
   return <View style={{ ...styles.containerStyle, backgroundColor }}>{children}</View>;
 };
 
-export { CardSection };
+CardSection.defaultProps = {
+  backgroundColor: styles.containerStyle.backgroundColor,
+};
+
+CardSection.propTypes = {
+  backgroundColor: PropTypes.string,
+  children: PropTypes.node.isRequired,
+};
+
+export { CardSection }; // eslint-disable-line import/prefer-default-export
