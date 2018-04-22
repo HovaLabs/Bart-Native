@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ListView } from 'react-native';
+import { Colors } from './common/Theme';
 
 import { updateStationOrder, updateDeviceLocation } from '../actions';
 
@@ -37,24 +38,43 @@ class StationList extends Component {
   render() {
     const { stationList, stationOrder } = this.props;
 
+    const styles = {
+      selectedButton: {
+        backgroundColor: Colors.white,
+        borderWidth: 0,
+        padding: 5,
+        marginLeft: 5,
+        marginRight: 5,
+        paddingTop: 7,
+        paddingBottom: 5,
+      },
+      cardStyle: {
+        backgroundColor: Colors.grayBg,
+        paddingTop: 15,
+      },
+    };
+
     return (
-      <Card>
-        <CardSection>
-          <Button
-            onPress={() => this.props.updateStationOrder('alphabetical')}
-            selected={this.props.stationOrder === 'alphabetical'}
-          >
-            A-Z
-          </Button>
+      <Card style={styles.cardStyle}>
+        <CardSection style={styles.cardStyle}>
           <Button
             onPress={() => this.props.updateStationOrder('distance')}
             selected={this.props.stationOrder === 'distance'}
+            style={styles.selectedButton}
           >
             Distance
           </Button>
           <Button
+            onPress={() => this.props.updateStationOrder('alphabetical')}
+            selected={this.props.stationOrder === 'alphabetical'}
+            style={styles.selectedButton}
+          >
+            A-Z
+          </Button>
+          <Button
             onPress={() => this.props.updateStationOrder('favorites')}
             selected={this.props.stationOrder === 'favorites'}
+            style={styles.selectedButton}
           >
             Favorites
           </Button>

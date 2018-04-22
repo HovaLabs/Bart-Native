@@ -4,6 +4,7 @@ import autobind from 'react-autobind';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import distance from 'gps-distance';
+import { Colors } from './common/Theme';
 
 import { selectStation } from '../actions';
 
@@ -11,11 +12,19 @@ import { CardSection } from './common';
 
 const styles = {
   titleStyle: {
+    color: Colors.white,
     fontSize: 18,
-    paddingLeft: 15,
+    paddingLeft: 10,
   },
   distanceStyle: {
-    fontSize: 18,
+    fontSize: 16,
+    color: Colors.white,
+  },
+  cardStyle: {
+    backgroundColor: Colors.grayBg,
+    borderWidth: 0,
+    paddingTop: 15,
+    paddingBottom: 15,
   },
 };
 
@@ -37,7 +46,7 @@ class ListItem extends Component {
     return (
       <TouchableWithoutFeedback onPress={this.onRowPress}>
         <View>
-          <CardSection>
+          <CardSection style={styles.cardStyle}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View>
                 <Text style={styles.titleStyle}>{station.name}</Text>
