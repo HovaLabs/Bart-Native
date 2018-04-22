@@ -1,14 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
+import { Colors } from '../../Variables';
 
 const styles = {
   containerStyle: {
-    borderBottomWidth: 1,
     padding: 5,
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.gray,
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    borderColor: '#dddddd',
     position: 'relative',
   },
 };

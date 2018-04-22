@@ -4,6 +4,7 @@ import autobind from 'react-autobind';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import distance from 'gps-distance';
+import { Colors } from '../Variables';
 
 import { selectStation } from '../actions';
 
@@ -11,6 +12,7 @@ import { CardSection } from './common';
 
 const styles = {
   titleStyle: {
+    color: Colors.white,
     fontSize: 18,
     paddingLeft: 15,
   },
