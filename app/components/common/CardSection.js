@@ -12,8 +12,10 @@ const styles = {
   },
 };
 
-const CardSection = ({ children, style }) => (
-  <View style={{ ...styles.containerStyle, ...style }}>{children}</View>
-);
+const CardSection = (props) => {
+  const { backgroundColor, children } = props;
+
+  return <View style={{ ...styles.containerStyle, backgroundColor }}>{children}</View>;
+};
 
 export { CardSection };

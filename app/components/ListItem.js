@@ -18,6 +18,7 @@ const styles = {
   },
   distanceStyle: {
     fontSize: 18,
+    color: Colors.white,
   },
 };
 
@@ -35,11 +36,11 @@ class ListItem extends Component {
 
   render() {
     const { user, station } = this.props;
-
+    const backgroundColor = station.index % 2 === 0 ? Colors.black : Colors.gray;
     return (
       <TouchableWithoutFeedback onPress={this.onRowPress}>
         <View>
-          <CardSection>
+          <CardSection backgroundColor={backgroundColor}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View>
                 <Text style={styles.titleStyle}>{station.name}</Text>
