@@ -1,33 +1,46 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import { Colors } from '../../Variables';
 
 const styles = {
   textStyle: {
     alignSelf: 'center',
-    color: '#007aff',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10,
   },
+  selectedTextStyle: {
+    color: Colors.black,
+  },
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
-    backgroundColor: '#ffffff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007aff',
+    backgroundColor: Colors.black,
+    borderRadius: 0,
     marginLeft: 5,
     marginRight: 5,
   },
+  selectedButtonStyle: {
+    backgroundColor: Colors.white,
+  },
 };
 
-const Button = ({ children, onPress, selected = false }) => (
+const Button = ({
+  children, onPress, selected = false, style,
+}) => (
   <TouchableOpacity
     onPress={onPress}
-    style={selected ? { ...styles.buttonStyle, backgroundColor: '#eeeeee' } : styles.buttonStyle}
+    style={
+        selected ? { ...styles.buttonStyle, ...styles.selectedButtonStyle } : styles.buttonStyle
+      }
   >
-    <Text style={styles.textStyle}>{children}</Text>
+    <Text
+      style={selected ? { ...styles.textStyle, ...styles.selectedTextStyle } : styles.textStyle}
+    >
+      {children}
+    </Text>
   </TouchableOpacity>
 );
 
