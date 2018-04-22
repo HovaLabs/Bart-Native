@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Scene, Router, Actions } from 'react-native-router-flux';
-import { Platform, AsyncStorage } from 'react-native';
+import { Platform, AsyncStorage, StatusBar } from 'react-native';
 
 import { loadSavedState } from './actions';
 import * as defaultData from './defaultData';
-
+import { Colors } from './Variables';
 import Station from './components/Station';
 import StationList from './components/StationList';
 
 const styles = {
   navBar: {
     marginTop: Platform.OS === 'ios' ? 0 : 24,
+    backgroundColor: Colors.black,
   },
   sceneStyle: {
     paddingTop: Platform.OS === 'ios' ? 65 : 84,
+  },
+  navigationBarTitleImageStyle: {
+    height: 30,
   },
 };
 
 class RouterComponent extends Component {
   async componentDidMount() {
+    StatusBar.setBarStyle('light-content', true);
     // await AsyncStorage.clear();
     try {
       const savedState = await AsyncStorage.getItem('appData');
@@ -39,7 +44,14 @@ class RouterComponent extends Component {
       <Router navigationBarStyle={styles.navBar} sceneStyle={styles.sceneStyle}>
         <Scene key="root" hideNavBar>
           <Scene key="main">
-            <Scene key="stationList" component={StationList} title="Station List" initial />
+            <Scene
+              navigationBarTitleImage={require('./img/bg1.png')}
+              navigationBarTitleImageStyle={styles.navigationBarTitleImageStyle}
+              key="stationList"
+              component={StationList}
+              title="Station List"
+              initial
+            />
             <Scene key="station" component={Station} />
           </Scene>
         </Scene>
