@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Scene, Router, Actions } from 'react-native-router-flux';
+import { Scene, Router } from 'react-native-router-flux';
 import { Platform, AsyncStorage, StatusBar } from 'react-native';
 
 import { loadSavedState } from './actions';
