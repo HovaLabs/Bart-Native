@@ -15,8 +15,8 @@ const styles = {
     color: Colors.white,
     fontSize: 18,
     fontWeight: '500',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   titleStyle: {
     paddingLeft: 15,

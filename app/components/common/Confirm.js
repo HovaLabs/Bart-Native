@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, Modal } from 'react-native';
 import { CardSection } from './CardSection';
 import { Button } from './Button';
+import { Colors } from '../../Variables';
 
 const styles = {
   cardSectionStyle: {
@@ -14,7 +15,7 @@ const styles = {
     lineHeight: 40,
   },
   containerStyle: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: Colors.gray,
     position: 'relative',
     flex: 1,
     justifyContent: 'center',

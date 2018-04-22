@@ -12,16 +12,19 @@ import StationList from './components/StationList';
 const styles = {
   navBar: {
     marginTop: Platform.OS === 'ios' ? 0 : 24,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.gray,
+    borderBottomWidth: 0,
   },
   sceneStyle: {
     paddingTop: Platform.OS === 'ios' ? 65 : 84,
+    backgroundColor: Colors.gray,
   },
   navigationBarTitleImageStyle: {
-    height: 30,
+    height: 40,
     alignSelf: 'flex-start',
     marginLeft: 20,
     paddingTop: 30,
+    backgroundColor: Colors.gray,
   },
 };
 

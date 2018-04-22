@@ -15,8 +15,6 @@ const Train = props => (
         width: 15,
         height: 15,
         backgroundColor: props.hexcolor,
-        borderStyle: 'solid',
-        borderWidth: 1,
         justifyContent: 'center',
       }}
     />

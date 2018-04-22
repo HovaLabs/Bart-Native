@@ -4,7 +4,8 @@ import { Colors } from '../../Variables';
 
 const styles = {
   containerStyle: {
-    padding: 5,
+    padding: 10,
+    paddingTop: 10,
     backgroundColor: Colors.gray,
     justifyContent: 'flex-start',
     flexDirection: 'row',

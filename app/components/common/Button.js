@@ -18,7 +18,6 @@ const styles = {
     flex: 1,
     alignSelf: 'stretch',
     backgroundColor: Colors.black,
-    borderRadius: 0,
     marginLeft: 5,
     marginRight: 5,
   },
