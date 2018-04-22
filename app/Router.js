@@ -19,6 +19,9 @@ const styles = {
   },
   navigationBarTitleImageStyle: {
     height: 30,
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    paddingTop: 30,
   },
 };
 
@@ -45,7 +48,7 @@ class RouterComponent extends Component {
         <Scene key="root" hideNavBar>
           <Scene key="main">
             <Scene
-              navigationBarTitleImage={require('./img/bg1.png')}
+              navigationBarTitleImage={require('./img/logo.png')}
               navigationBarTitleImageStyle={styles.navigationBarTitleImageStyle}
               key="stationList"
               component={StationList}

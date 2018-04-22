@@ -11,14 +11,16 @@ import { selectStation } from '../actions';
 import { CardSection } from './common';
 
 const styles = {
-  titleStyle: {
+  listStyle: {
     color: Colors.white,
     fontSize: 18,
-    paddingLeft: 15,
+    fontWeight: '500',
+    paddingTop: 10,
+    paddingBottom: 10,
   },
-  distanceStyle: {
-    fontSize: 18,
-    color: Colors.white,
+  titleStyle: {
+    paddingLeft: 15,
+    fontWeight: 'bold',
   },
 };
 
@@ -43,10 +45,10 @@ class ListItem extends Component {
           <CardSection backgroundColor={backgroundColor}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View>
-                <Text style={styles.titleStyle}>{station.name}</Text>
+                <Text style={{ ...styles.listStyle, ...styles.titleStyle }}>{station.name}</Text>
               </View>
               <View style={{ marginLeft: 'auto' }}>
-                <Text style={styles.distanceStyle}>{station.distanceFromDevice || '?'} miles</Text>
+                <Text style={styles.listStyle}>{station.distanceFromDevice || '?'} miles</Text>
               </View>
             </View>
           </CardSection>
