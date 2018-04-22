@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -8,38 +9,56 @@ import { updateStationDirection, selectStation } from '../actions';
 import { Card, CardSection, Button } from './common';
 import Train from './Train';
 
-class Destinations extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  sortDestinations({ destinations = [], station }) {
-    const trainList = [];
-    destinations.forEach((destination) => {
-      destination.estimate.forEach((train) => {
-        // Sorting hack. look for empty string to select all, or north / south
-        if (train.direction.toLowerCase().includes(station.direction)) {
-          trainList.push({
-            ...train,
-            destination: destination.destination,
-            abbreviation: destination.abbreviation,
-            limited: destination.limited,
-          });
-        }
-      });
+function sortDestinations({ destinations = [], station }) {
+  const trainList = [];
+  destinations.forEach((destination) => {
+    destination.estimate.forEach((train) => {
+      // Sorting hack. look for empty string to select all, or north / south
+      if (train.direction.toLowerCase().includes(station.direction)) {
+        trainList.push({
+          ...train,
+          destination: destination.destination,
+          abbreviation: destination.abbreviation,
+          limited: destination.limited,
+        });
+      }
     });
+  });
 
-    trainList.sort((a, b) =>
-      (Number(a.minutes) > Number(b.minutes) ? 1 : Number(a.minutes) < Number(b.minutes) ? -1 : 0));
+  trainList.sort((a, b) => {
+    if (Number(a.minutes) > Number(b.minutes)) {
+      return 1;
+    } else if (Number(a.minutes) < Number(b.minutes)) {
+      return -1;
+    }
+    return 0;
+  });
 
-    return trainList;
-  }
+  return trainList;
+}
 
-  renderRow(train, i) {
+function renderRow(train, i) {
+  return (
+    <CardSection key={i}>
+      <Train {...train} />
+    </CardSection>
+  );
+}
+
+class Destinations extends Component {
+  stationLink(abbr) {
     return (
-      <CardSection key={i}>
-        <Train {...train} />
-      </CardSection>
+      <Button
+        key={abbr}
+        onPress={() => {
+          const selectedStation = this.props.stationList.find(station => station.abbr === abbr);
+          console.log('selectedStation???', selectedStation, abbr);
+          this.props.selectStation(selectedStation);
+          Actions.refresh({ title: selectedStation.name });
+        }}
+      >
+        {abbr}
+      </Button>
     );
   }
 
@@ -78,20 +97,6 @@ class Destinations extends Component {
     );
   }
 
-  stationLink(abbr) {
-    return (
-      <Button
-        key={abbr}
-        onPress={() => {
-          const selectedStation = this.props.stationList.find(station => station.abbr === abbr);
-          this.props.selectStation(selectedStation);
-          Actions.refresh({ title: selectedStation.name });
-        }}
-      >
-        {abbr}
-      </Button>
-    );
-  }
   renderNextStations() {
     return (
       <Card>
@@ -112,8 +117,7 @@ class Destinations extends Component {
         <View>{this.renderNextStations()}</View>
         <View>
           <ScrollView>
-            {this.sortDestinations(this.props).map((destination, i) =>
-              this.renderRow(destination, i))}
+            {sortDestinations(this.props).map((destination, i) => renderRow(destination, i))}
           </ScrollView>
         </View>
       </View>
@@ -124,5 +128,11 @@ class Destinations extends Component {
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
 });
+
+Destinations.propTypes = {
+  stationList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateStationDirection: PropTypes.func.isRequired,
+  selectStation: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, { updateStationDirection, selectStation })(Destinations);

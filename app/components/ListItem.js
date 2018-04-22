@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
-import autobind from 'react-autobind';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import distance from 'gps-distance';
@@ -25,22 +25,16 @@ const styles = {
 };
 
 class ListItem extends Component {
-  constructor(props) {
-    super(props);
-
-    autobind(this);
-  }
-
   onRowPress() {
     this.props.selectStation(this.props.station);
     Actions.station({ title: this.props.station.name });
   }
 
   render() {
-    const { user, station } = this.props;
+    const { station } = this.props;
     const backgroundColor = station.index % 2 === 0 ? Colors.black : Colors.gray;
     return (
-      <TouchableWithoutFeedback onPress={this.onRowPress}>
+      <TouchableWithoutFeedback onPress={this.onRowPress.bind(this)}>
         <View>
           <CardSection backgroundColor={backgroundColor}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -58,6 +52,18 @@ class ListItem extends Component {
   }
 }
 
-const mapStateToProps = state => ({ user: state.user });
+ListItem.propTypes = {
+  selectStation: PropTypes.func.isRequired,
+  station: PropTypes.shape({
+    name: PropTypes.string,
+    abbr: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    direction: PropTypes.string,
+    visits: PropTypes.number,
+    northStations: PropTypes.arrayOf(PropTypes.string),
+    southStations: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+};
 
-export default connect(mapStateToProps, { selectStation })(ListItem);
+export default connect(null, { selectStation })(ListItem);
