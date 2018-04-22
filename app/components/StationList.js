@@ -33,9 +33,21 @@ const StationsFilter = props => (
 
 class StationList extends Component {
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition((position) => {
+    const options = {
+      // enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    const success = (position) => {
       this.props.updateDeviceLocation(position);
-    });
+    };
+
+    const error = (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
 
     const stationList = this.props.stationList.map((station, i) => ({ ...station, index: i }));
     this.createDataSource(stationList);
