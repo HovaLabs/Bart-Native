@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { TextInput, View, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
 const styles = {
   containerStyle: {
@@ -40,4 +40,17 @@ const Input = ({
   </View>
 );
 
-export { Input };
+Input.defaultProps = {
+  placeholder: '',
+  secureTextEntry: false,
+};
+
+Input.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChangeText: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  secureTextEntry: PropTypes.bool,
+};
+
+export { Input }; // eslint-disable-line import/prefer-default-export

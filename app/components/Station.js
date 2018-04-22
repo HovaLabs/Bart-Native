@@ -1,12 +1,47 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import PropTypes from 'prop-types';
 
 import { pingStation, updateStationDirection, selectStation } from '../actions';
 
 import { Card, CardSection, Button } from './common';
 import Train from './Train';
+
+function sortDestinations(destinations = [], direction) {
+  const trainList = [];
+  destinations.forEach((destination) => {
+    destination.estimate.forEach((train) => {
+      // Sorting hack. look for empty string to select all, or north / south
+      if (train.direction.toLowerCase().includes(direction)) {
+        trainList.push({
+          ...train,
+          destination: destination.destination,
+          abbreviation: destination.abbreviation,
+          limited: destination.limited,
+        });
+      }
+    });
+  });
+
+  trainList.sort((a, b) => {
+    if (Number(a.minutes) > Number(b.minutes)) {
+      return 1;
+    } else if (Number(a.minutes) < Number(b.minutes)) {
+      return -1;
+    }
+    return 0;
+  });
+
+  return trainList;
+}
+
+const renderRow = (train, i) => (
+  <CardSection key={i}>
+    <Train {...train} />
+  </CardSection>
+);
 
 class Station extends Component {
   componentDidMount() {
@@ -28,71 +63,6 @@ class Station extends Component {
     clearInterval(this.updater);
   }
 
-  sortDestinations(destinations = [], direction) {
-    const trainList = [];
-    destinations.forEach((destination) => {
-      destination.estimate.forEach((train) => {
-        // Sorting hack. look for empty string to select all, or north / south
-        if (train.direction.toLowerCase().includes(direction)) {
-          trainList.push({
-            ...train,
-            destination: destination.destination,
-            abbreviation: destination.abbreviation,
-            limited: destination.limited,
-          });
-        }
-      });
-    });
-
-    trainList.sort((a, b) =>
-      (Number(a.minutes) > Number(b.minutes) ? 1 : Number(a.minutes) < Number(b.minutes) ? -1 : 0));
-
-    return trainList;
-  }
-
-  renderRow(train, i) {
-    return (
-      <CardSection key={i}>
-        <Train {...train} />
-      </CardSection>
-    );
-  }
-
-  renderButtons() {
-    const { selectedStation, updateStationDirection } = this.props;
-
-    return (
-      <Card>
-        <CardSection>
-          <Button
-            onPress={() => {
-              updateStationDirection(selectedStation.abbr, '');
-            }}
-            selected={selectedStation.direction === ''}
-          >
-            All
-          </Button>
-          <Button
-            onPress={() => {
-              updateStationDirection(selectedStation.abbr, 'north');
-            }}
-            selected={selectedStation.direction === 'north'}
-          >
-            North
-          </Button>
-          <Button
-            onPress={() => {
-              updateStationDirection(selectedStation.abbr, 'south');
-            }}
-            selected={selectedStation.direction === 'south'}
-          >
-            South
-          </Button>
-        </CardSection>
-      </Card>
-    );
-  }
-
   stationLink(abbr) {
     return (
       <Button
@@ -109,6 +79,40 @@ class Station extends Component {
       </Button>
     );
   }
+
+  renderButtons() {
+    return (
+      <Card>
+        <CardSection>
+          <Button
+            onPress={() => {
+              this.props.updateStationDirection(this.props.selectedStation.abbr, '');
+            }}
+            selected={this.props.selectedStation.direction === ''}
+          >
+            All
+          </Button>
+          <Button
+            onPress={() => {
+              this.props.updateStationDirection(this.props.selectedStation.abbr, 'north');
+            }}
+            selected={this.props.selectedStation.direction === 'north'}
+          >
+            North
+          </Button>
+          <Button
+            onPress={() => {
+              updateStationDirection(this.props.selectedStation.abbr, 'south');
+            }}
+            selected={this.props.selectedStation.direction === 'south'}
+          >
+            South
+          </Button>
+        </CardSection>
+      </Card>
+    );
+  }
+
   renderNextStations() {
     return (
       <Card>
@@ -121,21 +125,16 @@ class Station extends Component {
   }
 
   render() {
-    const { selectedStation, updateStationDirection, stationInfo } = this.props;
-
-    let destinations;
-    try {
-      destinations = this.props.stationInfo.root.station[0].etd;
-    } catch (ex) {}
-
+    const { stationInfo, selectedStation } = this.props;
     return (
       <View>
         <View>{this.renderButtons()}</View>
         <View>{this.renderNextStations()}</View>
-        {destinations ? (
+        {stationInfo ? (
           <View>
             <ScrollView>
-              {this.sortDestinations(destinations, selectedStation.direction).map((destination, i) => this.renderRow(destination, i))}
+              {sortDestinations(stationInfo, selectedStation.direction).map((destination, i) =>
+                renderRow(destination, i))}
             </ScrollView>
           </View>
         ) : (
@@ -146,9 +145,50 @@ class Station extends Component {
   }
 }
 
+Station.defaultProps = {
+  stationInfo: null,
+};
+
+Station.propTypes = {
+  stationList: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    abbr: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    direction: PropTypes.string,
+    visits: PropTypes.number,
+    northStations: PropTypes.arrayOf(PropTypes.string),
+    southStations: PropTypes.arrayOf(PropTypes.string),
+  })).isRequired,
+  selectedStation: PropTypes.shape({
+    name: PropTypes.string,
+    abbr: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    direction: PropTypes.string,
+    visits: PropTypes.number,
+    northStations: PropTypes.arrayOf(PropTypes.string),
+    southStations: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  pingStation: PropTypes.func.isRequired,
+  updateStationDirection: PropTypes.func.isRequired,
+  selectStation: PropTypes.func.isRequired,
+  stationInfo: PropTypes.arrayOf(PropTypes.object),
+};
+
+const findSelectedStation = (state) => {
+  const { stationList, selectedStation } = state.stationInfo;
+  return stationList.find(station => station.abbr === selectedStation.abbr);
+};
+
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
-  selectedStation: state.stationInfo.stationList.find(station => station.abbr === state.stationInfo.selectedStation.abbr),
+  selectedStation: findSelectedStation(state),
   stationInfo: state.stationInfo.stationInfo,
 });
-export default connect(mapStateToProps, { pingStation, updateStationDirection, selectStation })(Station);
+
+export default connect(mapStateToProps, {
+  pingStation,
+  updateStationDirection,
+  selectStation,
+})(Station);

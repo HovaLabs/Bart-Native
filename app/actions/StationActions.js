@@ -1,6 +1,3 @@
-import { Actions } from 'react-native-router-flux';
-import { AsyncStorage } from 'react-native';
-
 import {
   UPDATE_DEVICE_LOCATION,
   LOAD_SAVED_STATE,

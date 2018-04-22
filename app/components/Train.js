@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
 function trainString(props) {
   const minutes = props.minutes.includes('eaving')
@@ -23,5 +24,9 @@ const Train = props => (
     </View>
   </View>
 );
+
+Train.propTypes = {
+  hexcolor: PropTypes.string.isRequired,
+};
 
 export default Train;

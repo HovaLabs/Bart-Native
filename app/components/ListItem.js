@@ -3,7 +3,6 @@ import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import distance from 'gps-distance';
 import { Colors } from '../Variables';
 
 import { selectStation } from '../actions';
@@ -34,7 +33,7 @@ class ListItem extends Component {
     const { station } = this.props;
     const backgroundColor = station.index % 2 === 0 ? Colors.black : Colors.gray;
     return (
-      <TouchableWithoutFeedback onPress={this.onRowPress.bind(this)}>
+      <TouchableWithoutFeedback onPress={() => this.onRowPress()}>
         <View>
           <CardSection backgroundColor={backgroundColor}>
             <View style={{ flex: 1, flexDirection: 'row' }}>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Scene, Router } from 'react-native-router-flux';
 import { Platform, AsyncStorage, StatusBar } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { loadSavedState } from './actions';
 import * as defaultData from './defaultData';
@@ -54,7 +55,7 @@ class RouterComponent extends Component {
         <Scene key="root" hideNavBar>
           <Scene key="main">
             <Scene
-              navigationBarTitleImage={require('./img/logo.png')}
+              navigationBarTitleImage={require('./img/logo.png')} // eslint-disable-line global-require
               navigationBarTitleImageStyle={styles.navigationBarTitleImageStyle}
               key="stationList"
               component={StationList}
@@ -69,7 +70,11 @@ class RouterComponent extends Component {
   }
 }
 
-mapStateToProps = state => ({
+RouterComponent.propTypes = {
+  loadSavedState: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
   selectedStation: state.selectedStation,
 });
 

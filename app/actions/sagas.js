@@ -1,17 +1,14 @@
 import { AsyncStorage } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { delay } from 'redux-saga';
-import { put, takeEvery, takeLatest, all, takeLeading, call } from 'redux-saga/effects';
+import { put, takeEvery, takeLatest, all, call } from 'redux-saga/effects';
 
 import distance from 'gps-distance';
 
 import {
   UPDATE_DEVICE_LOCATION,
-  LOAD_SAVED_STATE,
   UPDATE_SAVED_STATE,
   SELECT_STATION,
   UPDATE_STATION_ETDS,
-  UPDATE_STATION_LIST_FILTER,
   UPDATE_STATION_DIRECTION,
   PING_STATION,
 } from './types';
@@ -33,9 +30,11 @@ function* pingStation(action) {
       action.payload
     }&key=MW9S-E7SL-26DU-VV8V&json=y`;
     const body = yield fetch(stationUrl);
-    const payload = yield body.json();
+    const stationInfo = yield body.json();
+    const payload = stationInfo.root.station[0].etd;
     yield put({ type: UPDATE_STATION_ETDS, payload });
   } catch (ex) {
+    console.log('nope', ex);
     // If the request fails and there is no prior data
     // loading icon?
   }
@@ -48,10 +47,11 @@ function* watchPingStation() {
 function* selectStation(action) {
   const savedStateString = yield AsyncStorage.getItem('appData');
   const savedState = JSON.parse(savedStateString);
-  savedState.stationList.forEach((station) => {
+  savedState.stationList = savedState.stationList.map((station) => {
     if (station.abbr === action.payload.abbr) {
-      station.visits += 1;
+      return { ...station, visits: station.visits + 1 };
     }
+    return station;
   });
 
   yield AsyncStorage.setItem('appData', JSON.stringify(savedState));
@@ -85,13 +85,14 @@ function* updateStationDirection(action) {
   const savedState = JSON.parse(savedStateString);
 
   let updated = false;
-  savedState.stationList.forEach((station) => {
+  savedState.stationList = savedState.stationList.map((station) => {
     if (station.abbr === abbr) {
       if (station.direction !== direction) {
         updated = true;
-        station.direction = direction;
       }
+      return { ...station, direction };
     }
+    return station;
   });
 
   if (updated) {
