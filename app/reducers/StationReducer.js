@@ -73,7 +73,14 @@ export default (state = INITIAL_STATE, action) => {
       return newState;
     }
     case UPDATE_STATION_ETDS: {
-      return { ...state, stationInfo: action.payload };
+      const bigStation = Object.assign({}, action.payload);
+      bigStation.root.station[0].etd = [
+        ...bigStation.root.station[0].etd,
+        ...bigStation.root.station[0].etd,
+        ...bigStation.root.station[0].etd,
+      ];
+
+      return { ...state, stationInfo: bigStation };
     }
     case UPDATE_STATION_LIST_FILTER: {
       AsyncStorage.getItem('appData').then((persistentDataString) => {
@@ -92,6 +99,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedStation: action.payload,
+        stationInfo: null,
       };
     }
     default: {

@@ -86,9 +86,11 @@ function* updateStationDirection(action) {
 
   let updated = false;
   savedState.stationList.forEach((station) => {
-    if ((station.abbr === abbr) & (station.direction !== direction)) {
-      updated = true;
-      station.direction = direction;
+    if (station.abbr === abbr) {
+      if (station.direction !== direction) {
+        updated = true;
+        station.direction = direction;
+      }
     }
   });
 
