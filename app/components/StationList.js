@@ -7,6 +7,29 @@ import { updateStationListFilter, updateDeviceLocation } from '../actions';
 import { Button, CardSection } from './common';
 import ListItem from './ListItem';
 
+const StationsFilter = props => (
+  <CardSection>
+    <Button
+      onPress={() => props.updateStationListFilter('alphabetical')}
+      selected={props.stationOrder === 'alphabetical'}
+    >
+      A-Z
+    </Button>
+    <Button
+      onPress={() => props.updateStationListFilter('distance')}
+      selected={props.stationOrder === 'distance'}
+    >
+      Distance
+    </Button>
+    <Button
+      onPress={() => props.updateStationListFilter('favorites')}
+      selected={props.stationOrder === 'favorites'}
+    >
+      Favorites
+    </Button>
+  </CardSection>
+);
+
 class StationList extends Component {
   componentWillMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -37,26 +60,7 @@ class StationList extends Component {
 
     return (
       <View style={{ marginBottom: 53 }}>
-        <CardSection>
-          <Button
-            onPress={() => this.props.updateStationListFilter('alphabetical')}
-            selected={this.props.stationOrder === 'alphabetical'}
-          >
-            A-Z
-          </Button>
-          <Button
-            onPress={() => this.props.updateStationListFilter('distance')}
-            selected={this.props.stationOrder === 'distance'}
-          >
-            Distance
-          </Button>
-          <Button
-            onPress={() => this.props.updateStationListFilter('favorites')}
-            selected={this.props.stationOrder === 'favorites'}
-          >
-            Favorites
-          </Button>
-        </CardSection>
+        <StationsFilter {...this.props} />
         <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />
       </View>
     );

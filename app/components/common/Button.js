@@ -32,9 +32,7 @@ const Button = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={
-        selected ? { ...styles.buttonStyle, ...styles.selectedButtonStyle } : styles.buttonStyle
-      }
+    style={selected ? { ...styles.buttonStyle, ...styles.selectedButtonStyle } : styles.buttonStyle}
   >
     <Text
       style={selected ? { ...styles.textStyle, ...styles.selectedTextStyle } : styles.textStyle}
