@@ -24,7 +24,6 @@ const styles = {
     alignSelf: 'flex-start',
     marginLeft: 20,
     paddingTop: 30,
-    backgroundColor: Colors.gray,
   },
 };
 
@@ -47,7 +46,11 @@ class RouterComponent extends Component {
 
   render() {
     return (
-      <Router navigationBarStyle={styles.navBar} sceneStyle={styles.sceneStyle}>
+      <Router
+        navigationBarStyle={styles.navBar}
+        style={{ backgroundColor: Colors.gray }}
+        sceneStyle={styles.sceneStyle}
+      >
         <Scene key="root" hideNavBar>
           <Scene key="main">
             <Scene
