@@ -127,14 +127,12 @@ class Station extends Component {
         <View>{this.renderButtons()}</View>
         <View>{this.renderNextStations()}</View>
         {stationInfo ? (
-          <View>
-            <ScrollView>
-              {sortDestinations(stationInfo, selectedStation.direction).map((destination, i) =>
-                renderRow(destination, i))}
-            </ScrollView>
-          </View>
+          <ScrollView>
+            {sortDestinations(stationInfo, selectedStation.direction).map((destination, i) =>
+              renderRow(destination, i))}
+          </ScrollView>
         ) : (
-          <View />
+          <ScrollView />
         )}
       </View>
     );
