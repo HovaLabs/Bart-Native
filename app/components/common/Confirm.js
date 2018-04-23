@@ -1,7 +1,10 @@
 import React from 'react';
 import { Text, View, Modal } from 'react-native';
+import PropTypes from 'prop-types';
+
 import { CardSection } from './CardSection';
 import { Button } from './Button';
+import { Colors } from '../../Variables';
 
 const styles = {
   cardSectionStyle: {
@@ -14,7 +17,7 @@ const styles = {
     lineHeight: 40,
   },
   containerStyle: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: Colors.gray,
     position: 'relative',
     flex: 1,
     justifyContent: 'center',
@@ -38,4 +41,15 @@ const Confirm = ({
   </Modal>
 );
 
-export { Confirm };
+Confirm.defaultProps = {
+  visible: false,
+};
+
+Confirm.propTypes = {
+  children: PropTypes.node.isRequired,
+  visible: PropTypes.bool,
+  onAccept: PropTypes.func.isRequired,
+  onDecline: PropTypes.func.isRequired,
+};
+
+export { Confirm }; // eslint-disable-line import/prefer-default-export

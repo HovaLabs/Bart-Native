@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, ListView } from 'react-native';
+import { View, ListView } from 'react-native';
+import PropTypes from 'prop-types';
 
-import { updateStationListFilter, updateDeviceLocation } from '../actions';
+import { Colors } from '../Variables';
 
-import { Button, CardSection } from './common';
+import { updateDeviceLocation } from '../actions';
+
+import StationsFilter from './StationsFilter';
 import ListItem from './ListItem';
+
+const renderRow = station => <ListItem station={station} />;
 
 class StationList extends Component {
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.props.updateDeviceLocation(position);
-    });
+    const options = {
+      // enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
 
-    this.createDataSource(this.props.stationList);
+    const success = (position) => {
+      this.props.updateDeviceLocation(position);
+    };
+
+    const error = (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+    const stationList = this.props.stationList.map((station, i) => ({ ...station, index: i }));
+    this.createDataSource(stationList);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.createDataSource(nextProps.stationList);
+    const stationList = nextProps.stationList.map((station, i) => ({ ...station, index: i }));
+    this.createDataSource(stationList);
   }
 
   createDataSource(stationList) {
@@ -28,44 +47,32 @@ class StationList extends Component {
     this.dataSource = ds.cloneWithRows(stationList);
   }
 
-  renderRow(station) {
-    return <ListItem station={station} />;
-  }
-
   render() {
-    const { stationList, stationOrder } = this.props;
-
     return (
-      <View style={{ marginBottom: 53 }}>
-        <CardSection>
-          <Button
-            onPress={() => this.props.updateStationListFilter('alphabetical')}
-            selected={this.props.stationOrder === 'alphabetical'}
-          >
-            A-Z
-          </Button>
-          <Button
-            onPress={() => this.props.updateStationListFilter('distance')}
-            selected={this.props.stationOrder === 'distance'}
-          >
-            Distance
-          </Button>
-          <Button
-            onPress={() => this.props.updateStationListFilter('favorites')}
-            selected={this.props.stationOrder === 'favorites'}
-          >
-            Favorites
-          </Button>
-        </CardSection>
-        <ListView enableEmptySections dataSource={this.dataSource} renderRow={this.renderRow} />
+      <View style={{ backgroundColor: Colors.gray }}>
+        <StationsFilter />
+        <ListView enableEmptySections dataSource={this.dataSource} renderRow={renderRow} />
       </View>
     );
   }
 }
 
+StationList.propTypes = {
+  stationList: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    abbr: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    direction: PropTypes.string,
+    visits: PropTypes.number,
+    northStations: PropTypes.arrayOf(PropTypes.string),
+    southStations: PropTypes.arrayOf(PropTypes.string),
+  })).isRequired,
+  updateDeviceLocation: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => ({
   stationList: state.stationInfo.stationList,
-  stationOrder: state.stationInfo.stationOrder,
 });
 
-export default connect(mapStateToProps, { updateDeviceLocation, updateStationListFilter })(StationList);
+export default connect(mapStateToProps, { updateDeviceLocation })(StationList);

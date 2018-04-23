@@ -1,34 +1,70 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
+import stylePropType from 'react-style-proptype';
+
+import { Colors } from '../../Variables';
 
 const styles = {
   textStyle: {
     alignSelf: 'center',
-    color: '#007aff',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10,
   },
+  selectedTextStyle: {
+    color: Colors.black,
+  },
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
-    backgroundColor: '#ffffff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007aff',
+    backgroundColor: Colors.black,
     marginLeft: 5,
     marginRight: 5,
   },
+  selectedButtonStyle: {
+    backgroundColor: Colors.white,
+  },
 };
 
-const Button = ({ children, onPress, selected = false }) => (
+const Button = ({
+  children, onPress, selected = false, buttonStyle, textStyle,
+}) => (
   <TouchableOpacity
     onPress={onPress}
-    style={selected ? { ...styles.buttonStyle, backgroundColor: '#eeeeee' } : styles.buttonStyle}
+    style={
+      selected
+        ? { ...styles.buttonStyle, ...styles.selectedButtonStyle, ...buttonStyle }
+        : { ...styles.buttonStyle, ...buttonStyle }
+    }
   >
-    <Text style={styles.textStyle}>{children}</Text>
+    <Text
+      style={
+        selected
+          ? { ...styles.textStyle, ...styles.selectedTextStyle, ...textStyle }
+          : { ...styles.textStyle, ...textStyle }
+      }
+    >
+      {children}
+    </Text>
   </TouchableOpacity>
 );
 
-export { Button };
+Button.defaultProps = {
+  onPress: null,
+  selected: false,
+  buttonStyle: {},
+  textStyle: {},
+};
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  onPress: PropTypes.func,
+  selected: PropTypes.bool,
+  buttonStyle: stylePropType,
+  textStyle: stylePropType,
+};
+
+export { Button }; // eslint-disable-line import/prefer-default-export

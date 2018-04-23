@@ -1,13 +1,10 @@
 import { AsyncStorage } from 'react-native';
-import { pick } from 'lodash';
 
 import {
   LOAD_SAVED_STATE,
   SELECT_STATION,
   UPDATE_STATION_ETDS,
   UPDATE_STATION_LIST_FILTER,
-  UPDATE_DEVICE_LOCATION,
-  UPDATE_STATION_DIRECTION,
   UPDATE_SAVED_STATE,
 } from '../actions/types';
 
@@ -18,28 +15,31 @@ const INITIAL_STATE = {
   stationList: [],
 };
 
-function getPersistentDataFromState(state) {
-  return pick(state, ['stationOrder', 'stationList']);
-}
-
-function updateStationListFilter(originalStationList, order, persistentStations) {
+function updateStationListFilter(originalStationList, order) {
   const sortedStationList = Object.assign([], originalStationList);
   sortedStationList.sort((a, b) => {
     switch (order) {
       case 'alphabetical':
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+        if (a.name > b.name) {
+          return 1;
+        } else if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
       case 'distance':
-        return Number(a.distanceFromDevice) > Number(b.distanceFromDevice)
-          ? 1
-          : Number(a.distanceFromDevice) < Number(b.distanceFromDevice)
-            ? -1
-            : 0;
+        if (Number(a.distanceFromDevice) > Number(b.distanceFromDevice)) {
+          return 1;
+        } else if (Number(a.distanceFromDevice) < Number(b.distanceFromDevice)) {
+          return -1;
+        }
+        return 0;
       case 'favorites':
-        return Number(a.visits) < Number(b.visits)
-          ? 1
-          : Number(a.visits) > Number(b.visits)
-            ? -1
-            : 0;
+        if (Number(a.visits) < Number(b.visits)) {
+          return 1;
+        } else if (Number(a.visits) > Number(b.visits)) {
+          return -1;
+        }
+        return 0;
       default:
         return 0;
     }
@@ -70,15 +70,13 @@ export default (state = INITIAL_STATE, action) => {
           action.payload.stationOrder,
         ),
       };
+
       return newState;
     }
     case UPDATE_STATION_ETDS: {
-      const bigStation = Object.assign({}, action.payload);
-      bigStation.root.station[0].etd = [
-        ...bigStation.root.station[0].etd,
-        ...bigStation.root.station[0].etd,
-        ...bigStation.root.station[0].etd,
-      ];
+      // TODO Remove "bigStation" before going to production
+      let bigStation = Object.assign([], action.payload);
+      bigStation = [...bigStation, ...bigStation, ...bigStation];
 
       return { ...state, stationInfo: bigStation };
     }
