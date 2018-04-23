@@ -98,7 +98,7 @@ class Station extends Component {
           </Button>
           <Button
             onPress={() => {
-              updateStationDirection(this.props.selectedStation.abbr, 'south');
+              this.props.updateStationDirection(this.props.selectedStation.abbr, 'south');
             }}
             selected={this.props.selectedStation.direction === 'south'}
           >
