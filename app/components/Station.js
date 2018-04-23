@@ -37,11 +37,7 @@ function sortDestinations(destinations = [], direction) {
   return trainList;
 }
 
-const renderRow = (train, i) => (
-  <CardSection key={i}>
-    <Train {...train} />
-  </CardSection>
-);
+const renderRow = (train, i) => <Train key={i} {...train} />;
 
 class Station extends Component {
   componentDidMount() {
