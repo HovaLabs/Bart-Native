@@ -3,11 +3,11 @@ import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { Colors } from '../Variables';
 
-function trainString(props) {
+function minutesToDeparture(props) {
   const minutes = props.minutes.includes('eaving')
     ? 'Leaving'
     : `${props.minutes} minute${Number(props.minutes) === 1 ? '' : 's'}`;
-  return `${props.destination}: ${minutes}`;
+  return minutes;
 }
 const trainStyle = {
   flex: 1,
@@ -15,6 +15,8 @@ const trainStyle = {
   paddingTop: 10,
   paddingBottom: 10,
   paddingLeft: 15,
+  borderBottomColor: Colors.black,
+  borderBottomWidth: 1,
 };
 
 const Train = props => (
