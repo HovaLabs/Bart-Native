@@ -78,7 +78,7 @@ export default (state = INITIAL_STATE, action) => {
       let bigStation = Object.assign([], action.payload);
       bigStation = [...bigStation, ...bigStation, ...bigStation];
 
-      return { ...state, stationInfo: bigStation };
+      return { ...state, stationInfo: action.payload };
     }
     case UPDATE_STATION_LIST_FILTER: {
       AsyncStorage.getItem('appData').then((persistentDataString) => {
