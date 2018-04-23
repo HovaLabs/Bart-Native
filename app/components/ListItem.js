@@ -31,7 +31,7 @@ class ListItem extends Component {
 
   render() {
     const { station } = this.props;
-    const backgroundColor = station.index % 2 === 0 ? Colors.black : Colors.gray;
+    const backgroundColor = station.index % 2 === 0 ? Colors.dark_gray : Colors.gray;
     return (
       <TouchableWithoutFeedback onPress={() => this.onRowPress()}>
         <View>
