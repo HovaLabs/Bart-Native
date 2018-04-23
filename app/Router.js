@@ -26,6 +26,9 @@ const styles = {
     marginLeft: 20,
     paddingTop: 30,
   },
+  leftButtonStyle: {
+    fill: Colors.white,
+  },
 };
 
 class RouterComponent extends Component {
@@ -62,7 +65,12 @@ class RouterComponent extends Component {
               title="Station List"
               initial
             />
-            <Scene key="station" component={Station} />
+            <Scene
+              leftButtonIconStyle={{ tintColor: Colors.white }}
+              titleStyle={{ color: Colors.white, fontWeight: '700' }}
+              key="station"
+              component={Station}
+            />
           </Scene>
         </Scene>
       </Router>
