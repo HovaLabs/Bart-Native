@@ -21,7 +21,12 @@ const trainStyle = {
 
 const Train = props => (
   <View style={{ ...trainStyle, backgroundColor: props.hexcolor }}>
-    <Text style={{ fontSize: 18 }}>{trainString(props)}</Text>
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      <Text style={{ fontSize: 18 }}>{props.destination}:</Text>
+      <Text style={{ paddingRight: 15, fontSize: 18, marginLeft: 'auto' }}>
+        {minutesToDeparture(props)}
+      </Text>
+    </View>
     <Text style={{ fontSize: 18, paddingTop: 5 }}>5 Trains</Text>
   </View>
 );
