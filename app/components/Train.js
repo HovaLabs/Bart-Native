@@ -27,7 +27,7 @@ const Train = props => (
         {minutesToDeparture(props)}
       </Text>
     </View>
-    <Text style={{ fontSize: 18, paddingTop: 5 }}>5 Trains</Text>
+    <Text style={{ fontSize: 18, paddingTop: 5 }}>{props.length} Trains</Text>
   </View>
 );
 
