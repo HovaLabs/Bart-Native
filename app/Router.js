@@ -19,6 +19,7 @@ const styles = {
   sceneStyle: {
     paddingTop: Platform.OS === 'ios' ? 65 : 84,
     backgroundColor: Colors.gray,
+    marginBottom: 60,
   },
   navigationBarTitleImageStyle: {
     height: 40,
@@ -70,6 +71,7 @@ class RouterComponent extends Component {
               titleStyle={{ color: Colors.white, fontWeight: '700' }}
               key="station"
               component={Station}
+              style={{ marginBottom: -60 }}
             />
           </Scene>
         </Scene>

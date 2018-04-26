@@ -15,11 +15,13 @@ function sortDestinations(destinations = [], direction) {
     destination.estimate.forEach((train) => {
       // Sorting hack. look for empty string to select all, or north / south
       if (train.direction.toLowerCase().includes(direction)) {
+        const minutes = Number.isNaN(Number(train.minutes)) ? 0 : Number(train.minutes);
         trainList.push({
           ...train,
           destination: destination.destination,
           abbreviation: destination.abbreviation,
           limited: destination.limited,
+          minutes,
         });
       }
     });
@@ -127,7 +129,7 @@ class Station extends Component {
         <View>{this.renderButtons()}</View>
         <View>{this.renderNextStations()}</View>
         {stationInfo ? (
-          <ScrollView>
+          <ScrollView style={{marginBottom: 'auto'}}>
             {sortDestinations(stationInfo, selectedStation.direction).map((destination, i) =>
               renderRow(destination, i))}
           </ScrollView>
