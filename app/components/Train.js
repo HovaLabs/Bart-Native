@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Colors } from '../Variables';
 
 function minutesToDeparture(props) {
-  const minutes = props.minutes.includes('eaving')
+  const minutes = props.minutes === 0
     ? 'Leaving'
     : `${props.minutes} minute${Number(props.minutes) === 1 ? '' : 's'}`;
   return minutes;
@@ -19,8 +19,12 @@ const trainStyle = {
   borderBottomWidth: 1,
 };
 
+function bartColorToCustomColor(color) {
+  return Colors[color.toLowerCase()];
+}
+
 const Train = props => (
-  <View style={{ ...trainStyle, backgroundColor: props.hexcolor }}>
+  <View style={{ ...trainStyle, backgroundColor: bartColorToCustomColor(props.color) }}>
     <View style={{ flex: 1, flexDirection: 'row' }}>
       <Text style={{ fontSize: 18 }}>{props.destination}:</Text>
       <Text style={{ paddingRight: 15, fontSize: 18, marginLeft: 'auto' }}>
