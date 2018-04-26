@@ -23,6 +23,8 @@ const styles = {
     backgroundColor: Colors.black,
     marginLeft: 5,
     marginRight: 5,
+    borderWidth: 1,
+    borderColor: Colors.white,
   },
   selectedButtonStyle: {
     backgroundColor: Colors.white,
